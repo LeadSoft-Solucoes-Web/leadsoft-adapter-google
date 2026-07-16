@@ -1,0 +1,91 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+	  <TargetFramework>net10.0</TargetFramework>
+	  <Company>LeadSoft® Soluções Web Ltda</Company>
+	  <Authors>Lucas R. Tavares | Frederico F. Bitencourt</Authors>
+	  <Product>LeadSoft® Google Api Adapter</Product>
+	  <RepositoryType>Bitbucket</RepositoryType>
+	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+	  <Description>LeadSoft® Google Api integration methods and classes.</Description>
+	  <RepositoryUrl>https://github.com/LeadSoft-Solucoes-Web/leadsoft-adapter-google</RepositoryUrl>
+	  <NeutralLanguage>en-US</NeutralLanguage>
+	  <PackageIcon>LeadSoft.png</PackageIcon>
+	  <PackageProjectUrl>https://www.leadsoft.inf.br/</PackageProjectUrl>
+	  <ApplicationIcon>LeadSoft.ico</ApplicationIcon>
+	  <SignAssembly>False</SignAssembly>
+	  <Nullable>enable</Nullable>
+	  <ImplicitUsings>enable</ImplicitUsings>
+	  <Title>LeadSoft® Google Api Integration Adapter</Title>
+	  <Copyright>© LeadSoft® 2026</Copyright>
+	  <AssemblyVersion>10.1.0.0</AssemblyVersion>
+	  <FileVersion>10.1.0.0</FileVersion>
+	  <Version>10.1.0</Version>
+	  <PackageReadmeFile>README.md</PackageReadmeFile>
+	  <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+	  <AnalysisLevel>latest-all</AnalysisLevel>	 
+	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
+	  <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
+	  <DocumentationFile>.\LeadSoft.Adapter.Google.xml</DocumentationFile>
+  </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+		<WarningsAsErrors />
+		<DocumentationFile>.\LeadSoft.Common.Library.xml</DocumentationFile>
+		<Optimize>True</Optimize>
+		<DebugType>embedded</DebugType>
+		<CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+	</PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+	  <Optimize>True</Optimize>
+	</PropertyGroup>
+
+	<ItemGroup>
+	<None Include="..\LeadSoft.png" Link="LeadSoft.png">
+	  <PackagePath></PackagePath>
+	  <Pack>True</Pack>
+	</None>
+	<None Include="..\README.md">
+	  <Pack>True</Pack>
+	  <PackagePath>\</PackagePath>
+	</None>
+  </ItemGroup>
+
+  <ItemGroup>
+	<PackageReference Include="LeadSoft.Common.Library" Version="10.0.4" />
+  </ItemGroup>
+
+  <ItemGroup>
+	<AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+	  <_Parameter1>LeadSoft.Google.Tests</_Parameter1>
+	</AssemblyAttribute>
+  </ItemGroup>
+
+  <ItemGroup>
+	<Compile Update="Google_ReCaptcha_EndPoint.Designer.cs">
+	  <DependentUpon>Google_ReCaptcha_EndPoint.resx</DependentUpon>
+	  <DesignTime>True</DesignTime>
+	  <AutoGen>True</AutoGen>
+	</Compile>
+	<Compile Update="Google_ReCaptcha_Enterprise_EndPoint.Designer.cs">
+	  <DesignTime>True</DesignTime>
+	  <AutoGen>True</AutoGen>
+	  <DependentUpon>Google_ReCaptcha_Enterprise_EndPoint.resx</DependentUpon>
+	</Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+	<EmbeddedResource Update="Google_ReCaptcha_EndPoint.resx">
+	  <LastGenOutput>Google_ReCaptcha_EndPoint.Designer.cs</LastGenOutput>
+	  <Generator>ResXFileCodeGenerator</Generator>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Google_ReCaptcha_Enterprise_EndPoint.resx">
+	  <Generator>ResXFileCodeGenerator</Generator>
+	  <LastGenOutput>Google_ReCaptcha_Enterprise_EndPoint.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
+  </ItemGroup>
+
+</Project>

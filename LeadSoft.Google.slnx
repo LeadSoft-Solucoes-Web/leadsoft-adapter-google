@@ -1,0 +1,8 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="LeadSoft.png" />
+    <File Path="README.md" />
+  </Folder>
+  <Project Path="LeadSoft.Adapter.Google.ReCaptcha/LeadSoft.Adapter.Google.ReCaptcha.csproj" />
+  <Project Path="LeadSoft.Google.Tests/LeadSoft.Google.Tests.csproj" />
+</Solution>

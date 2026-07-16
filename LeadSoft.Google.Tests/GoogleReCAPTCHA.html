@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Token reCAPTCHA | LeadSoft®</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --ls-dark:    #1a2538;
+            --ls-blue:    #1565c0;
+            --ls-accent:  #1e88e5;
+            --ls-border:  #1565c0;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar-custom {
+            background-color: var(--ls-dark);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .navbar-brand-text {
+            font-weight: 600;
+            letter-spacing: 0.02em;
+        }
+
+        .navbar-brand-text span {
+            color: var(--ls-accent);
+        }
+
+        .main-content {
+            flex: 1;
+            padding: 40px 15px;
+        }
+
+        .card-custom {
+            border: none;
+            border-top: 4px solid var(--ls-border);
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+            background-color: #ffffff;
+            padding: 32px;
+        }
+
+        .section-title {
+            color: var(--ls-dark);
+            font-weight: 700;
+            margin-bottom: 4px;
+        }
+
+        .section-subtitle {
+            color: #6c757d;
+            font-size: 0.95rem;
+            margin-bottom: 28px;
+        }
+
+        textarea[readonly] {
+            background-color: #e9ecef;
+            color: #495057;
+            cursor: not-allowed;
+            resize: vertical;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.85rem;
+        }
+
+        .btn-primary {
+            background-color: var(--ls-blue);
+            border-color: var(--ls-blue);
+        }
+
+        .btn-primary:hover {
+            background-color: var(--ls-accent);
+            border-color: var(--ls-accent);
+        }
+
+        .docs-section {
+            border-top: 1px solid #dee2e6;
+            margin-top: 28px;
+            padding-top: 20px;
+        }
+
+        .docs-section h6 {
+            color: var(--ls-dark);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        .docs-section a {
+            color: var(--ls-accent);
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .docs-section a:hover {
+            text-decoration: underline;
+        }
+
+        .footer {
+            background-color: var(--ls-dark);
+            color: #adb5bd;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+
+        .footer a {
+            color: #90caf9;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+
+        .footer p { margin: 2px 0; }
+
+        .btn { font-weight: 500; }
+    </style>
+
+    <script>
+        let currentSiteKey = '';
+
+        function generateToken() {
+            const siteKey = document.getElementById("sitekey").value.trim();
+
+            if (!siteKey) {
+                alert("Por favor, informe o Site Key.");
+                return;
+            }
+
+            document.getElementById("response").value = "";
+
+            const btn = document.getElementById("btn-gerar");
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span> Gerando...`;
+            btn.disabled = true;
+
+            if (currentSiteKey !== siteKey) {
+                const oldScript = document.getElementById("recaptcha-script");
+                if (oldScript) oldScript.remove();
+
+                const script = document.createElement("script");
+                script.id = "recaptcha-script";
+                script.src = `https://www.google.com/recaptcha/api.js?render=${siteKey}`;
+
+                script.onload = () => {
+                    currentSiteKey = siteKey;
+                    executeCaptcha(siteKey);
+                };
+
+                script.onerror = () => {
+                    alert("Erro ao carregar o reCAPTCHA. Verifique se o Site Key é válido.");
+                    resetButton();
+                };
+
+                document.head.appendChild(script);
+            } else {
+                executeCaptcha(siteKey);
+            }
+        }
+
+        function executeCaptcha(siteKey) {
+            grecaptcha.ready(function () {
+                grecaptcha.execute(siteKey, { action: 'submit' }).then(function (token) {
+                    document.getElementById("response").value = token;
+                    resetButton();
+                }).catch(function (err) {
+                    console.error(err);
+                    alert("Erro ao executar o reCAPTCHA. Verifique se o Site Key pertence a este domínio.");
+                    resetButton();
+                });
+            });
+        }
+
+        function resetButton() {
+            const btn = document.getElementById("btn-gerar");
+            btn.innerHTML = "Gerar Novo Token";
+            btn.disabled = false;
+        }
+
+        function copyToken() {
+            const tokenText = document.getElementById("response").value;
+            if (!tokenText) {
+                alert("Nenhum token para copiar! Gere um primeiro.");
+                return;
+            }
+            navigator.clipboard.writeText(tokenText)
+                .then(() => alert("Token copiado com sucesso!"))
+                .catch(() => alert("Falha ao copiar o token."));
+        }
+
+        function copySiteKey() {
+            const siteKeyText = document.getElementById("sitekey").value.trim();
+            if (!siteKeyText) {
+                alert("O campo Site Key está vazio!");
+                return;
+            }
+            navigator.clipboard.writeText(siteKeyText)
+                .then(() => alert("Site Key copiado!"))
+                .catch(() => alert("Falha ao copiar o Site Key."));
+        }
+    </script>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center navbar-brand-text" href="https://www.leadsoft.inf.br" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.leadsoft.inf.br/favicon.ico" alt="" width="22" height="22" class="d-inline-block align-text-top me-2" onerror="this.style.display='none'">
+                LeadSoft<span>®</span>&nbsp;Google reCAPTCHA Adapter
+            </a>
+            <span class="navbar-text d-none d-md-block text-light opacity-75">
+                Developer Tools
+            </span>
+        </div>
+    </nav>
+
+    <div class="main-content container d-flex justify-content-center align-items-start">
+        <div class="col-12 col-lg-8">
+            <div class="card card-custom">
+
+                <h3 class="section-title">Gerador de Token reCAPTCHA</h3>
+                <p class="section-subtitle">
+                    Utilitário para gerar o token de resposta do Google reCAPTCHA v3 e usá-lo como valor do campo
+                    <code>Response</code> do <code>DTOSiteVerifyRequest</code> ao testar o adapter.
+                </p>
+
+                <div class="mb-4">
+                    <label for="sitekey" class="form-label fw-bold">Google Site Key (reCAPTCHA v3)</label>
+                    <div class="input-group">
+                        <input type="text" id="sitekey" class="form-control font-monospace"
+                               placeholder="Ex: 6Lccat8lAAAAAP2daZ3423as34VATeUSorLD1wf" />
+                        <button class="btn btn-outline-secondary" type="button" onclick="copySiteKey()" title="Copiar Site Key">
+                            Copiar Key
+                        </button>
+                    </div>
+                    <div class="form-text">
+                        Insira a <strong>Site Key pública</strong> cadastrada no
+                        <a href="https://www.google.com/recaptcha/admin" target="_blank" rel="noopener noreferrer">Google reCAPTCHA Admin Console</a>.
+                        O token gerado é válido por cerca de 2 minutos.
+                    </div>
+                </div>
+
+                <div class="d-grid mb-4">
+                    <button id="btn-gerar" class="btn btn-primary btn-lg" onclick="generateToken()">
+                        Gerar Token
+                    </button>
+                </div>
+
+                <div class="mb-3">
+                    <label for="response" class="form-label fw-bold d-flex justify-content-between align-items-end">
+                        Token Resultante (Response)
+                        <button class="btn btn-success btn-sm" onclick="copyToken()">Copiar Token</button>
+                    </label>
+                    <textarea id="response" class="form-control" rows="6" readonly
+                              placeholder="Aguardando geração do token..."></textarea>
+                </div>
+
+                <div class="alert alert-info mt-3 mb-0 py-2" role="alert">
+                    <small>
+                        <strong>Dica:</strong> Combine este token com a <strong>Secret Key</strong> do seu projeto para
+                        testar o método <code>PostSiteVerifyAsync</code> do adapter.
+                        A Secret Key nunca deve ser exposta no client-side.
+                    </small>
+                </div>
+
+                <div class="docs-section">
+                    <h6>Documentação de referência</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                            <a href="https://developers.google.com/recaptcha/docs/v3" target="_blank" rel="noopener noreferrer">
+                                🔗 Google reCAPTCHA v3 — Documentação oficial
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://cloud.google.com/recaptcha/docs/overview" target="_blank" rel="noopener noreferrer">
+                                🔗 Google reCAPTCHA Enterprise — Documentação oficial
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://cloud.google.com/recaptcha/docs/reference/rest/v1/projects.assessments" target="_blank" rel="noopener noreferrer">
+                                🔗 reCAPTCHA Enterprise REST API — projects.assessments
+                            </a>
+                        </li>
+                        <li>
+                            <a href="https://github.com/LeadSoft-Solucoes-Web/leadsoft-adapter-google" target="_blank" rel="noopener noreferrer">
+                                🔗 LeadSoft.Adapter.Google.ReCaptcha — Repositório no GitHub
+                            </a>
+                        </li>
+                    </ul>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>
+                <a href="https://www.leadsoft.inf.br" target="_blank" rel="noopener noreferrer">LeadSoft® Soluções Web</a>
+                &mdash; Google reCAPTCHA Integration Adapter
+            </p>
+            <p>&copy; LeadSoft® 2026 &mdash; Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+</body>
+</html>
