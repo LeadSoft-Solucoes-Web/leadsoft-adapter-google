@@ -12,7 +12,6 @@ namespace LeadSoft.Adapter.Google.ReCaptchaService
     public partial class ReCAPTCHA : IReCAPTCHA
     {
         private readonly HttpClient _Client = null;
-        private const string _BaseURL = "https://www.google.com/recaptcha/api/";
 
         /// <summary>
         /// Inicializa uma nova instância de <see cref="ReCAPTCHA"/> com um <see cref="HttpClient"/> configurado.
@@ -21,7 +20,7 @@ namespace LeadSoft.Adapter.Google.ReCaptchaService
         {
             _Client = new HttpClient
             {
-                BaseAddress = new Uri(_BaseURL)
+                BaseAddress = new Uri(Google_ReCaptcha_BaseURL.v3v2)
             };
         }
 
@@ -32,7 +31,7 @@ namespace LeadSoft.Adapter.Google.ReCaptchaService
         {
             _Client = new HttpClient(handler)
             {
-                BaseAddress = new Uri(_BaseURL)
+                BaseAddress = new Uri(Google_ReCaptcha_BaseURL.v3v2)
             };
         }
 

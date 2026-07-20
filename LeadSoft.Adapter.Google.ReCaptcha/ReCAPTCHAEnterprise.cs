@@ -12,7 +12,6 @@ namespace LeadSoft.Adapter.Google.ReCaptchaService
     public partial class ReCAPTCHAEnterprise : IReCAPTCHAEnterprise
     {
         private readonly HttpClient _Client = null;
-        private const string _BaseURL = "https://recaptchaenterprise.googleapis.com/v1/projects/{0}/";
 
         /// <summary>
         /// Inicializa uma nova instância de <see cref="ReCAPTCHAEnterprise"/> para o projeto informado.
@@ -22,7 +21,7 @@ namespace LeadSoft.Adapter.Google.ReCaptchaService
         {
             _Client = new HttpClient
             {
-                BaseAddress = new Uri(string.Format(_BaseURL, projectId))
+                BaseAddress = new Uri(Google_ReCaptcha_BaseURL.Enterprise.Fill(projectId))
             };
         }
 
@@ -33,7 +32,7 @@ namespace LeadSoft.Adapter.Google.ReCaptchaService
         {
             _Client = new HttpClient(handler)
             {
-                BaseAddress = new Uri(string.Format(_BaseURL, projectId))
+                BaseAddress = new Uri(Google_ReCaptcha_BaseURL.Enterprise.Fill(projectId))
             };
         }
 
@@ -43,7 +42,7 @@ namespace LeadSoft.Adapter.Google.ReCaptchaService
             HttpResponseMessage response = await HttpCall.SendAsync(
                 _Client,
                 HttpMethod.Post,
-                string.Format(Google_ReCaptcha_Enterprise_EndPoint.Post_Assessment, apiKey),
+                Google_ReCaptcha_Enterprise_EndPoint.Post_Assessment.Fill(apiKey),
                 aObject: aDtoRequest);
 
             if (response.IsSuccessStatusCode)

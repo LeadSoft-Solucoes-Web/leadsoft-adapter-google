@@ -8,23 +8,13 @@ namespace LeadSoft.Adapter.Google.ReCaptchaService.DTOs;
 /// DTO de requisição para criação de uma avaliação (Assessment) no reCAPTCHA Enterprise.
 /// </summary>
 [Serializable]
-public partial class DTOAssessmentReq
+public partial class DTOAssessmentReq(string token, string siteKey)
 {
     /// <summary>
     /// Evento reCAPTCHA contendo o token e a chave do site para avaliação.
     /// </summary>
     [JsonProperty("event")]
-    public DTOAssessmentEventReq Event { get; set; }
-
-    /// <summary>
-    /// Inicializa uma nova instância de <see cref="DTOAssessmentReq"/>.
-    /// </summary>
-    /// <param name="token">Token de resposta do usuário gerado pelo reCAPTCHA Enterprise client-side.</param>
-    /// <param name="siteKey">Chave do site utilizada para invocar o reCAPTCHA Enterprise.</param>
-    public DTOAssessmentReq(string token, string siteKey)
-    {
-        Event = new DTOAssessmentEventReq(token, siteKey);
-    }
+    public DTOAssessmentEventReq Event { get; set; } = new(token, siteKey);
 }
 
 // https://cloud.google.com/recaptcha/docs/reference/rest/v1/projects.assessments#Event

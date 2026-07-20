@@ -18,9 +18,9 @@
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <Title>LeadSoft® Google Api Integration Adapter</Title>
 	  <Copyright>© LeadSoft® 2026</Copyright>
-	  <AssemblyVersion>10.1.0.0</AssemblyVersion>
-	  <FileVersion>10.1.0.0</FileVersion>
-	  <Version>10.1.0</Version>
+	  <AssemblyVersion>10.2.0.0</AssemblyVersion>
+	  <FileVersion>10.2.0.0</FileVersion>
+	  <Version>10.2.0</Version>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  <AnalysisLevel>latest-all</AnalysisLevel>	 
@@ -65,6 +65,16 @@
   </ItemGroup>
 
   <ItemGroup>
+	<Compile Update="EnvVariable.Designer.cs">
+	  <DesignTime>True</DesignTime>
+	  <AutoGen>True</AutoGen>
+	  <DependentUpon>EnvVariable.resx</DependentUpon>
+	</Compile>
+	<Compile Update="Google_ReCaptcha_BaseURL.Designer.cs">
+	  <DesignTime>True</DesignTime>
+	  <AutoGen>True</AutoGen>
+	  <DependentUpon>Google_ReCaptcha_BaseURL.resx</DependentUpon>
+	</Compile>
 	<Compile Update="Google_ReCaptcha_EndPoint.Designer.cs">
 	  <DependentUpon>Google_ReCaptcha_EndPoint.resx</DependentUpon>
 	  <DesignTime>True</DesignTime>
@@ -78,6 +88,14 @@
   </ItemGroup>
 
   <ItemGroup>
+	<EmbeddedResource Update="EnvVariable.resx">
+	  <Generator>ResXFileCodeGenerator</Generator>
+	  <LastGenOutput>EnvVariable.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
+	<EmbeddedResource Update="Google_ReCaptcha_BaseURL.resx">
+	  <Generator>ResXFileCodeGenerator</Generator>
+	  <LastGenOutput>Google_ReCaptcha_BaseURL.Designer.cs</LastGenOutput>
+	</EmbeddedResource>
 	<EmbeddedResource Update="Google_ReCaptcha_EndPoint.resx">
 	  <LastGenOutput>Google_ReCaptcha_EndPoint.Designer.cs</LastGenOutput>
 	  <Generator>ResXFileCodeGenerator</Generator>
