@@ -1,0 +1,454 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LeadSoft.Adapter.Google.ReCaptcha</name>
+    </assembly>
+    <members>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.Attibutes.ReCAPTCHAEnterpriseResponseAttribute">
+            <summary>
+            Atributo de validação para verificar a resposta do reCAPTCHA Enterprise do Google.
+            </summary>
+            <remarks>
+            Aplique a propriedades, campos ou parâmetros que recebem o token gerado pelo reCAPTCHA Enterprise client-side.
+            Os valores necessários podem ser fornecidos diretamente no construtor ou via variáveis de ambiente:
+            <list type="bullet">
+              <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_SITE_KEY</c></term><description>Chave pública do site reCAPTCHA Enterprise.</description></item>
+              <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_PROJECT_ID</c></term><description>ID do projeto no Google Cloud.</description></item>
+              <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_API_KEY</c></term><description>Chave de API do Google Cloud Console.</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Attibutes.ReCAPTCHAEnterpriseResponseAttribute.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Inicializa o atributo de validação do reCAPTCHA Enterprise.
+            </summary>
+            <param name="siteKey">Site Key pública do reCAPTCHA Enterprise. Se omitida, lê de <c>GOOGLE_RECAPTCHA_ENTERPRISE_SITE_KEY</c>.</param>
+            <param name="projectId">ID do projeto no Google Cloud. Se omitido, lê de <c>GOOGLE_RECAPTCHA_ENTERPRISE_PROJECT_ID</c>.</param>
+            <param name="apiKey">Chave de API do Google Cloud Console. Se omitida, lê de <c>GOOGLE_RECAPTCHA_ENTERPRISE_API_KEY</c>.</param>
+            <exception cref="T:System.NotImplementedException">Este atributo ainda não está implementado.</exception>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Attibutes.ReCAPTCHAEnterpriseResponseAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <inheritdoc/>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.Attibutes.ReCAPTCHAResponseAttribute">
+             <summary>
+             Atributo de validação para verificar a resposta do reCAPTCHA v2/v3 do Google.
+             </summary>
+             <remarks>
+             Aplique a propriedades, campos ou parâmetros que recebem o token gerado pelo reCAPTCHA client-side.
+             A <b>Secret Key</b> (chave privada do servidor) pode ser fornecida diretamente no construtor
+             ou via variável de ambiente <c>GOOGLE_RECAPTCHA_SECRET_KEY</c>.
+            
+             <para>⚠️ Não confundir com a <i>Site Key</i> (chave pública usada no HTML) —
+             a validação server-side exige a <b>Secret Key</b>.</para>
+             </remarks>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Attibutes.ReCAPTCHAResponseAttribute.#ctor(System.String)">
+            <summary>
+            Inicializa o atributo de validação do reCAPTCHA v2/v3.
+            </summary>
+            <param name="secretKey">
+            Secret Key do reCAPTCHA (chave privada do servidor).
+            Se omitida, lê da variável de ambiente <c>GOOGLE_RECAPTCHA_SECRET_KEY</c>.
+            </param>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Attibutes.ReCAPTCHAResponseAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
+            <summary>
+            Valida a resposta do reCAPTCHA v2/v3 do Google.
+            </summary>
+            <param name="value">Token de resposta gerado pelo reCAPTCHA client-side.</param>
+            <param name="validationContext">Contexto de validação fornecido pelo framework.</param>
+            <returns>
+            <see cref="F:System.ComponentModel.DataAnnotations.ValidationResult.Success"/> se o token for válido ou nulo;
+            um <see cref="T:System.ComponentModel.DataAnnotations.ValidationResult"/> com a descrição do erro caso contrário.
+            </returns>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentEventReq">
+            <summary>
+            DTO do evento reCAPTCHA Enterprise contendo o token e a chave do site.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentEventReq.Token">
+            <summary>
+            Token de resposta do usuário fornecido pela integração client-side do reCAPTCHA Enterprise.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentEventReq.SiteKey">
+            <summary>
+            Chave do site utilizada para invocar o reCAPTCHA Enterprise e gerar o token.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentEventReq.#ctor(System.String,System.String)">
+            <summary>
+            Inicializa uma nova instância de <see cref="T:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentEventReq"/>.
+            </summary>
+            <param name="token">Token de resposta do usuário.</param>
+            <param name="siteKey">Chave do site reCAPTCHA Enterprise.</param>
+            <exception cref="T:System.ArgumentNullException">Lançado quando <paramref name="token"/> ou <paramref name="siteKey"/> for nulo.</exception>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentEventResp">
+            <summary>
+            DTO do evento reCAPTCHA retornado na resposta da avaliação Enterprise.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentEventResp.Token">
+            <summary>
+            Token de resposta do usuário que foi avaliado.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentEventResp.SiteKey">
+            <summary>
+            Chave do site utilizada para gerar o token avaliado.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentReq">
+            <summary>
+            DTO de requisição para criação de uma avaliação (Assessment) no reCAPTCHA Enterprise.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentReq.#ctor(System.String,System.String)">
+            <summary>
+            DTO de requisição para criação de uma avaliação (Assessment) no reCAPTCHA Enterprise.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentReq.Event">
+            <summary>
+            Evento reCAPTCHA contendo o token e a chave do site para avaliação.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentResp">
+            <summary>
+            DTO de resposta da avaliação (Assessment) do reCAPTCHA Enterprise.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentResp.Name">
+            <summary>
+            Nome do recurso da avaliação gerado pela API do reCAPTCHA Enterprise.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentResp.Event">
+            <summary>
+            Evento reCAPTCHA que originou a avaliação, refletindo os dados enviados na requisição.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentResp.TokenProperties">
+            <summary>
+            Propriedades do token avaliado, incluindo validade e plataforma de origem.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentTokenPropertiesResp">
+            <summary>
+            DTO com as propriedades do token avaliado pelo reCAPTCHA Enterprise.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentTokenPropertiesResp.Valid">
+            <summary>
+            Indica se o token é válido.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentTokenPropertiesResp.InvalidReason">
+            <summary>
+            Motivo pelo qual o token foi considerado inválido, quando aplicável.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentTokenPropertiesResp.Hostname">
+            <summary>
+            Nome do host do site onde o reCAPTCHA foi resolvido (para integrações web).
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentTokenPropertiesResp.AndroidPackageName">
+            <summary>
+            Nome do pacote Android onde o reCAPTCHA foi resolvido (para integrações mobile Android).
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentTokenPropertiesResp.IosBundleId">
+            <summary>
+            Bundle ID do aplicativo iOS onde o reCAPTCHA foi resolvido (para integrações mobile iOS).
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentTokenPropertiesResp.Action">
+            <summary>
+            Ação associada ao token reCAPTCHA, conforme definida na integração client-side.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentTokenPropertiesResp.CreateTime">
+            <summary>
+            Data e hora em que o token foi criado.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyRequest">
+            <summary>
+            DTO de requisição para verificação de token do Google reCAPTCHA v3.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyRequest.Secret">
+            <summary>
+            Obrigatório. A chave secreta compartilhada entre o seu site e o reCAPTCHA.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyRequest.Response">
+            <summary>
+            Obrigatório. O token de resposta do usuário fornecido pela integração client-side do reCAPTCHA.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyRequest.RemoteIp">
+            <summary>
+            Opcional. O endereço IP do usuário.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyRequest.#ctor">
+            <summary>
+            Construtor padrão.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyRequest.#ctor(System.String,System.String,System.String)">
+            <summary>
+            Construtor com informações da requisição.
+            </summary>
+            <param name="aSecret">Chave secreta do reCAPTCHA.</param>
+            <param name="aResponse">Token de resposta do usuário.</param>
+            <param name="aRemoteIp">Endereço IP do usuário (opcional).</param>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyResponse">
+            <summary>
+            DTO de resposta da verificação de token do Google reCAPTCHA v3.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyResponse.Success">
+            <summary>
+            Indica se o desafio reCAPTCHA foi concluído com sucesso.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyResponse.ChallengeTs">
+            <summary>
+            Data e hora em que o desafio foi carregado (formato ISO yyyy-MM-dd'T'HH:mm:ssZZ).
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyResponse.Hostname">
+            <summary>
+            Nome do host do site onde o reCAPTCHA foi resolvido.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyResponse.ErrorCodes">
+             <summary>
+             Lista de códigos de erro retornados pela API, quando houver falha na validação.
+             </summary>
+             <remarks>
+             Descrição dos códigos de erro:
+            
+             - <b>missing-input-secret</b>: O parâmetro <c>secret</c> está ausente.
+            
+             - <b>invalid-input-secret</b>: O parâmetro <c>secret</c> é inválido ou malformado.
+            
+             - <b>missing-input-response</b>: O parâmetro <c>response</c> está ausente.
+            
+             - <b>invalid-input-response</b>: O parâmetro <c>response</c> é inválido ou malformado.
+            
+             - <b>bad-request</b>: A requisição é inválida ou malformada.
+            
+             - <b>timeout-or-duplicate</b>: O token não é mais válido — expirou ou já foi utilizado anteriormente.
+             </remarks>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.EnvVariable">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.EnvVariable.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.EnvVariable.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.EnvVariable.Google_ReCAPTCHA_Enterprise_Api_Key">
+            <summary>
+              Looks up a localized string similar to GOOGLE_RECAPTCHA_ENTERPRISE_API_KEY.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.EnvVariable.Google_ReCAPTCHA_Enterprise_Project_Id">
+            <summary>
+              Looks up a localized string similar to GOOGLE_RECAPTCHA_ENTERPRISE_PROJECT_ID.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.EnvVariable.Google_ReCAPTCHA_Enterprise_SiteKey">
+            <summary>
+              Looks up a localized string similar to GOOGLE_RECAPTCHA_ENTERPRISE_SITE_KEY.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.EnvVariable.Google_ReCAPTCHA_Secret_Key">
+            <summary>
+              Looks up a localized string similar to GOOGLE_RECAPTCHA_SECRET_KEY.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_BaseURL">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_BaseURL.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_BaseURL.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_BaseURL.Enterprise">
+            <summary>
+              Looks up a localized string similar to https://recaptchaenterprise.googleapis.com/v1/projects/{0}/.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_BaseURL.v3v2">
+            <summary>
+              Looks up a localized string similar to https://www.google.com/recaptcha/api/.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_EndPoint">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_EndPoint.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_EndPoint.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_EndPoint.Post_SiteVerify_v1">
+            <summary>
+              Looks up a localized string similar to siteverify?secret={0}&amp;response={1}&amp;remoteip={2}.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_Enterprise_EndPoint">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_Enterprise_EndPoint.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_Enterprise_EndPoint.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Google_ReCaptcha_Enterprise_EndPoint.Post_Assessment">
+            <summary>
+              Looks up a localized string similar to assessments?key={0}.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.Injection">
+            <summary>
+            Extensões de injeção de dependência para os serviços do Google reCAPTCHA.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Injection.AddReCAPTCHAApi(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Boolean)">
+            <summary>
+            Registra o serviço do Google reCAPTCHA v3 no <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
+            </summary>
+            <param name="services">A coleção de serviços onde o adapter será registrado.</param>
+            <param name="useSingleton">
+            <see langword="true"/> para registrar como singleton (compartilhado em toda a aplicação);
+            <see langword="false"/> para registrar como scoped (por requisição). Padrão: <see langword="false"/>.
+            </param>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Injection.AddReCAPTCHAEnterpriseApi(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,System.Boolean)">
+            <summary>
+            Registra o serviço do Google reCAPTCHA Enterprise no <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
+            </summary>
+            <param name="services">A coleção de serviços onde o adapter será registrado.</param>
+            <param name="projectId">O ID do projeto no Google Cloud associado ao reCAPTCHA Enterprise.</param>
+            <param name="useSingleton">
+            <see langword="true"/> para registrar como singleton (compartilhado em toda a aplicação);
+            <see langword="false"/> para registrar como scoped (por requisição). Padrão: <see langword="false"/>.
+            </param>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.IReCAPTCHA">
+            <summary>
+            Define o contrato para integração com o serviço de verificação do Google reCAPTCHA v3.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.IReCAPTCHA.PostSiteVerifyAsync(LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyRequest)">
+            <summary>
+            Valida o token de resposta do usuário junto à API do Google reCAPTCHA v3.
+            </summary>
+            <param name="aDtoRequest">Dados da requisição contendo o token e a chave secreta.</param>
+            <returns>Resultado da verificação com indicador de sucesso e possíveis códigos de erro.</returns>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.IReCAPTCHAEnterprise">
+            <summary>
+            Define o contrato para integração com o serviço Google reCAPTCHA Enterprise.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.IReCAPTCHAEnterprise.CreateAssessmentsAsync(LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentReq,System.String)">
+            <summary>
+            Cria uma avaliação (Assessment) da probabilidade de um evento ser legítimo.
+            </summary>
+            <param name="aDtoRequest">Dados do evento reCAPTCHA Enterprise para avaliação.</param>
+            <param name="apiKey">Chave de API do Google Cloud Console.</param>
+            <returns>Resultado da avaliação com propriedades do token e indicador de validade.</returns>
+            <exception cref="T:System.InvalidOperationException">Lançado quando a API retorna um status HTTP de erro.</exception>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA">
+            <summary>
+            Implementação do adapter para integração com o Google reCAPTCHA v3.
+            Encapsula as chamadas HTTP à API de verificação de token (<c>siteverify</c>).
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA.#ctor">
+            <summary>
+            Inicializa uma nova instância de <see cref="T:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA"/> com um <see cref="T:System.Net.Http.HttpClient"/> configurado.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA.#ctor(System.Net.Http.HttpMessageHandler)">
+            <summary>
+            Construtor interno para injeção de <see cref="T:System.Net.Http.HttpMessageHandler"/> em testes unitários.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA.PostSiteVerifyAsync(LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOSiteVerifyRequest)">
+            <inheritdoc/>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise">
+            <summary>
+            Implementação do adapter para integração com o Google reCAPTCHA Enterprise.
+            Encapsula as chamadas HTTP à API de avaliação de eventos (<c>assessments</c>).
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise.#ctor(System.String)">
+            <summary>
+            Inicializa uma nova instância de <see cref="T:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise"/> para o projeto informado.
+            </summary>
+            <param name="projectId">ID do projeto no Google Cloud associado ao reCAPTCHA Enterprise.</param>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise.#ctor(System.String,System.Net.Http.HttpMessageHandler)">
+            <summary>
+            Construtor interno para injeção de <see cref="T:System.Net.Http.HttpMessageHandler"/> em testes unitários.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise.CreateAssessmentsAsync(LeadSoft.Adapter.Google.ReCaptcha.DTOs.DTOAssessmentReq,System.String)">
+            <inheritdoc/>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise.Dispose">
+            <inheritdoc/>
+        </member>
+    </members>
+</doc>

@@ -1,5 +1,4 @@
-using LeadSoft.Adapter.Google.ReCaptchaService;
-using LeadSoft.Adapter.Google.ReCaptchaService.DTOs;
+using LeadSoft.Adapter.Google.ReCaptcha.DTOs;
 using LeadSoft.Common.Library.EnvUtils;
 using LeadSoft.Common.Library.Extensions;
 using System.ComponentModel.DataAnnotations;
@@ -67,7 +66,7 @@ public class ReCAPTCHAEnterpriseResponseAttribute : ValidationAttribute
         if (dto.TokenProperties?.Valid == true)
             return ValidationResult.Success;
 
-        return Error("Resposta de reCAPTCHA Enterprise inválida.", validationContext);
+        return Error($"Resposta de reCAPTCHA Enterprise inválida: {dto.ErrorMessage}", validationContext);
     }
 
     private static ValidationResult Error(string message, ValidationContext? context)

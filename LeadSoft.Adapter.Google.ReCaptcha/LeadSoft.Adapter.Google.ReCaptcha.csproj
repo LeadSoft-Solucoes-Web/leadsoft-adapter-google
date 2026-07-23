@@ -18,16 +18,16 @@
 	  <ImplicitUsings>enable</ImplicitUsings>
 	  <Title>LeadSoft® Google Api Integration Adapter</Title>
 	  <Copyright>© LeadSoft® 2026</Copyright>
-	  <AssemblyVersion>10.2.0.0</AssemblyVersion>
-	  <FileVersion>10.2.0.0</FileVersion>
-	  <Version>10.2.0</Version>
+	  <AssemblyVersion>10.2.3.0</AssemblyVersion>
+	  <FileVersion>10.2.3.0</FileVersion>
+	  <Version>10.2.3</Version>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  <AnalysisLevel>latest-all</AnalysisLevel>	 
 	  <PackageLicenseExpression>MIT</PackageLicenseExpression>
 	  <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
 	  <GenerateDocumentationFile>True</GenerateDocumentationFile>
-	  <DocumentationFile>.\LeadSoft.Adapter.Google.xml</DocumentationFile>
+	  <DocumentationFile>.\LeadSoft.Adapter.Google.ReCaptcha.xml</DocumentationFile>
   </PropertyGroup>
 
 	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">

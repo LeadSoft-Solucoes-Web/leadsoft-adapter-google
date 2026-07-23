@@ -1,6 +1,6 @@
-using LeadSoft.Adapter.Google.ReCaptchaService.DTOs;
+using LeadSoft.Adapter.Google.ReCaptcha.DTOs;
 
-namespace LeadSoft.Adapter.Google.ReCaptchaService;
+namespace LeadSoft.Adapter.Google.ReCaptcha;
 
 /// <summary>
 /// Define o contrato para integração com o serviço Google reCAPTCHA Enterprise.

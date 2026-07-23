@@ -1,12 +1,12 @@
 using Newtonsoft.Json;
 using System.ComponentModel;
 
-namespace LeadSoft.Adapter.Google.ReCaptchaService.DTOs;
+namespace LeadSoft.Adapter.Google.ReCaptcha.DTOs;
 
 /// <summary>
 /// DTO de requisição para verificação de token do Google reCAPTCHA v3.
 /// </summary>
-public partial class DTOSiteVerifyRequest
+public sealed partial record DTOSiteVerifyRequest
 {
     /// <summary>
     /// Obrigatório. A chave secreta compartilhada entre o seu site e o reCAPTCHA.

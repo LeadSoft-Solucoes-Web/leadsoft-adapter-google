@@ -1,4 +1,3 @@
-using LeadSoft.Adapter.Google.ReCaptchaService;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace LeadSoft.Adapter.Google.ReCaptcha;

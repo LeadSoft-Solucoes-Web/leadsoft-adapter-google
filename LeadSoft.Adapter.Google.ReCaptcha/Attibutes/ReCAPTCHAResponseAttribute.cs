@@ -1,5 +1,4 @@
-using LeadSoft.Adapter.Google.ReCaptchaService;
-using LeadSoft.Adapter.Google.ReCaptchaService.DTOs;
+using LeadSoft.Adapter.Google.ReCaptcha.DTOs;
 using LeadSoft.Common.Library.EnvUtils;
 using LeadSoft.Common.Library.Extensions;
 using System.ComponentModel.DataAnnotations;
@@ -68,7 +67,7 @@ public class ReCAPTCHAResponseAttribute : ValidationAttribute
             ? string.Join(", ", dto.ErrorCodes)
             : "resposta inválida";
 
-        return Error($"Resposta de reCAPTCHA inválida: {errorDetail}", validationContext);
+        return Error(errorDetail, validationContext);
     }
 
     private static ValidationResult Error(string message, ValidationContext? context)
