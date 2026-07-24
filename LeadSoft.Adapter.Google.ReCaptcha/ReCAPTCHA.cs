@@ -1,4 +1,4 @@
-﻿using LeadSoft.Adapter.Google.ReCaptcha.DTOs;
+﻿using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 using LeadSoft.Common.Library;
 using LeadSoft.Common.Library.Extensions;
 using System.Reflection;
@@ -9,7 +9,15 @@ namespace LeadSoft.Adapter.Google.ReCaptcha;
 /// Implementação do adapter para integração com o Google reCAPTCHA v3.
 /// Encapsula as chamadas HTTP à API de verificação de token (<c>siteverify</c>).
 /// </summary>
-public partial class ReCAPTCHA : IReCAPTCHA
+/// <remarks>
+/// Configuração do serviço via variáveis de ambiente:
+/// A <b>Secret Key</b> (chave privada do servidor) pode ser fornecida diretamente no construtor
+/// ou via variável de ambiente <c>GOOGLE_RECAPTCHA_SECRET_KEY</c>.
+///
+/// <para>⚠️ Não confundir com a <i>Site Key</i> (chave pública usada no HTML) —
+/// a validação server-side exige a <b>Secret Key</b>.</para>
+/// </remarks>
+public sealed partial class ReCAPTCHA : IReCAPTCHA
 {
     private readonly HttpClient _Client = null;
 
@@ -34,6 +42,7 @@ public partial class ReCAPTCHA : IReCAPTCHA
         {
             BaseAddress = new Uri(Google_ReCaptcha_BaseURL.v3v2)
         };
+        _Client.DefaultRequestHeaders.UserAgent.ParseAdd($"LeadSoft.Adapter.Google.ReCaptchaService/{Assembly.GetExecutingAssembly().GetName().Version} (+https://www.nuget.org/packages/LeadSoft.Adapter.Google.ReCaptchaService)");
     }
 
     /// <inheritdoc/>

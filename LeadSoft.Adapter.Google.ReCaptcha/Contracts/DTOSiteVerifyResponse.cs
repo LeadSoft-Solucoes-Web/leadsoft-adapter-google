@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace LeadSoft.Adapter.Google.ReCaptcha.DTOs;
+namespace LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 
 /// <summary>
 /// DTO de resposta da verificação de token do Google reCAPTCHA v3.
@@ -45,4 +45,16 @@ public sealed partial record DTOSiteVerifyResponse
     /// </remarks>
     [JsonProperty("error-codes", NullValueHandling = NullValueHandling.Ignore)]
     public IList<string> ErrorCodes { get; private set; }
+
+    public DTOSiteVerifyResponse()
+    {
+    }
+
+    public DTOSiteVerifyResponse(bool success, DateTime challengeTs, string hostname, IList<string> errorCodes)
+    {
+        Success = success;
+        ChallengeTs = challengeTs;
+        Hostname = hostname;
+        ErrorCodes = errorCodes;
+    }
 }

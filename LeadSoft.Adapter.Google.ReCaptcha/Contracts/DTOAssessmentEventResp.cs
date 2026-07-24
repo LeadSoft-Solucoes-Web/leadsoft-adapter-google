@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace LeadSoft.Adapter.Google.ReCaptcha.DTOs;
+namespace LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 
 /// <summary>
 /// DTO do evento reCAPTCHA retornado na resposta da avaliação Enterprise.

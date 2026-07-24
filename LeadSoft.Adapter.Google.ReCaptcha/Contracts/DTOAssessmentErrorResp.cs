@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace LeadSoft.Adapter.Google.ReCaptcha.DTOs;
+namespace LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 
 [Serializable]
 public sealed partial record DTOAssessmentErrorResp

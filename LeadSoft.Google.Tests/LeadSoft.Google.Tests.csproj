@@ -25,14 +25,17 @@
 
   <ItemGroup>
     <ProjectReference Include="..\LeadSoft.Adapter.Google.ReCaptcha\LeadSoft.Adapter.Google.ReCaptcha.csproj" />
+    <ProjectReference Include="..\LeadSoft.Adapter.Google.Workspace\LeadSoft.Adapter.Google.Workspace.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Using Include="Xunit" />
     <Using Include="Moq" />
-    <Using Include="LeadSoft.Adapter.Google.ReCaptchaService" />
-    <Using Include="LeadSoft.Adapter.Google.ReCaptchaService.DTOs" />
     <Using Include="LeadSoft.Adapter.Google.ReCaptcha" />
+    <Using Include="LeadSoft.Adapter.Google.ReCaptcha.Contracts" />
+    <Using Include="LeadSoft.Adapter.Google.Workspace" />
+    <Using Include="LeadSoft.Adapter.Google.Workspace.Contracts" />
+    <Using Include="LeadSoft.Common.Library.Exceptions" />
     <Using Include="Microsoft.Extensions.DependencyInjection" />
   </ItemGroup>
 

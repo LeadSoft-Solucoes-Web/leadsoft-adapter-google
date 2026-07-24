@@ -1,3 +1,5 @@
+using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
+
 namespace LeadSoft.Google.Tests.DTOs;
 
 public class DTOAssessmentRespTests

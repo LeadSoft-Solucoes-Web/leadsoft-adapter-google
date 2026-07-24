@@ -1,3 +1,5 @@
+using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
+
 namespace LeadSoft.Google.Tests.DTOs;
 
 public class DTOSiteVerifyResponseTests
@@ -7,13 +9,8 @@ public class DTOSiteVerifyResponseTests
     {
         var timestamp = new DateTime(2024, 1, 15, 10, 30, 0, DateTimeKind.Utc);
 
-        var dto = new DTOSiteVerifyResponse
-        {
-            Success = true,
-            ChallengeTs = timestamp,
-            Hostname = "test.localhost",
-            ErrorCodes = new List<string> { "missing-input-secret" }
-        };
+        DTOSiteVerifyResponse dto = new(true, timestamp, "test.localhost", ["missing-input-secret"]);
+
 
         Assert.True(dto.Success);
         Assert.Equal(timestamp, dto.ChallengeTs);

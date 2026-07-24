@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace LeadSoft.Adapter.Google.ReCaptcha.DTOs;
+namespace LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 
 // https://cloud.google.com/recaptcha/docs/reference/rest/v1/projects.assessments#resource:-assessment
 

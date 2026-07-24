@@ -1,0 +1,87 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <SSDTUnitTestPath Condition="'$(SSDTUnitTestPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB</SSDTUnitTestPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <SSDTPath Condition="'$(SSDTPath)' == ''">$(VsInstallRoot)\Common7\IDE\Extensions\Microsoft\SQLDB\DAC</SSDTPath>
+  </PropertyGroup>
+  <PropertyGroup>
+    <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Company>LeadSoft® Soluções Web Ltda</Company>
+    <Authors>Lucas R. Tavares</Authors>
+    <Product>LeadSoft® Google Workspace Api Adapter</Product>
+    <RepositoryType>Bitbucket</RepositoryType>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Description>LeadSoft® Google Workspace Api integration methods and classes.</Description>
+    <RepositoryUrl>https://github.com/LeadSoft-Solucoes-Web/leadsoft-adapter-google</RepositoryUrl>
+    <NeutralLanguage>en-US</NeutralLanguage>
+    <PackageIcon>LeadSoft.png</PackageIcon>
+    <PackageProjectUrl>https://www.leadsoft.inf.br/</PackageProjectUrl>
+    <ApplicationIcon>LeadSoft.ico</ApplicationIcon>
+    <SignAssembly>False</SignAssembly>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Title>LeadSoft® Google Workspace Api Integration Adapter</Title>
+    <Copyright>© LeadSoft® 2026</Copyright>
+    <AssemblyVersion>10.0.0.0</AssemblyVersion>
+    <FileVersion>10.0.0.0</FileVersion>
+    <Version>10.0.0</Version>
+    <PackageReadmeFile>README.md</PackageReadmeFile>
+    <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
+    <AnalysisLevel>latest-all</AnalysisLevel>
+    <PackageLicenseExpression>MIT</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <GenerateDocumentationFile>True</GenerateDocumentationFile>
+    <DocumentationFile>.\LeadSoft.Adapter.Google.Workspace.xml</DocumentationFile>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+    <Optimize>True</Optimize>
+    <DebugType>embedded</DebugType>
+    <CheckForOverflowUnderflow>True</CheckForOverflowUnderflow>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
+    <Optimize>True</Optimize>
+  </PropertyGroup>
+
+	<PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+		<Optimize>false</Optimize>
+	</PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="LeadSoft.ico" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="README.md">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+    <None Include="..\LeadSoft.png">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Google.Apis.Auth" Version="1.75.0" />
+    <PackageReference Include="Google.Apis.PeopleService.v1" Version="1.74.0.3973" />
+    <PackageReference Include="LeadSoft.Common.Library" Version="10.0.4" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="EnvVariable.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>EnvVariable.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Update="EnvVariable.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>EnvVariable.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>

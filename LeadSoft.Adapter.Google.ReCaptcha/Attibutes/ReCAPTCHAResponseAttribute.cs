@@ -1,4 +1,4 @@
-using LeadSoft.Adapter.Google.ReCaptcha.DTOs;
+using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 using LeadSoft.Common.Library.EnvUtils;
 using LeadSoft.Common.Library.Extensions;
 using System.ComponentModel.DataAnnotations;
@@ -16,9 +16,14 @@ namespace LeadSoft.Adapter.Google.ReCaptcha.Attibutes;
 /// <para>⚠️ Não confundir com a <i>Site Key</i> (chave pública usada no HTML) —
 /// a validação server-side exige a <b>Secret Key</b>.</para>
 /// </remarks>
-[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = true)]
+[AttributeUsage(AttributeTargets.Property | AttributeTargets.Field | AttributeTargets.Parameter, AllowMultiple = false)]
 public class ReCAPTCHAResponseAttribute : ValidationAttribute
 {
+    /// <summary>
+    /// Nome da variável de ambiente usada para ler a Secret Key quando nenhuma chave é fornecida explicitamente.
+    /// </summary>
+    public const string EnvVariable_SecretKey = "GOOGLE_RECAPTCHA_SECRET_KEY";
+
     // Instância estática: evita criar um novo HttpClient a cada chamada de IsValid.
     private static readonly ReCAPTCHA _recaptcha = new();
 

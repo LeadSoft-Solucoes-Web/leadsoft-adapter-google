@@ -3,11 +3,11 @@
   <PropertyGroup>
 	  <TargetFramework>net10.0</TargetFramework>
 	  <Company>LeadSoft® Soluções Web Ltda</Company>
-	  <Authors>Lucas R. Tavares | Frederico F. Bitencourt</Authors>
-	  <Product>LeadSoft® Google Api Adapter</Product>
+	  <Authors>Lucas R. Tavares</Authors>
+	  <Product>LeadSoft® Google ReCAPTCHA Api Adapter</Product>
 	  <RepositoryType>Bitbucket</RepositoryType>
 	  <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
-	  <Description>LeadSoft® Google Api integration methods and classes.</Description>
+	  <Description>LeadSoft® Google ReCAPTCHA Api integration methods and classes.</Description>
 	  <RepositoryUrl>https://github.com/LeadSoft-Solucoes-Web/leadsoft-adapter-google</RepositoryUrl>
 	  <NeutralLanguage>en-US</NeutralLanguage>
 	  <PackageIcon>LeadSoft.png</PackageIcon>
@@ -16,11 +16,11 @@
 	  <SignAssembly>False</SignAssembly>
 	  <Nullable>enable</Nullable>
 	  <ImplicitUsings>enable</ImplicitUsings>
-	  <Title>LeadSoft® Google Api Integration Adapter</Title>
+	  <Title>LeadSoft® Google ReCAPTCHA Api Integration Adapter</Title>
 	  <Copyright>© LeadSoft® 2026</Copyright>
-	  <AssemblyVersion>10.2.3.0</AssemblyVersion>
-	  <FileVersion>10.2.3.0</FileVersion>
-	  <Version>10.2.3</Version>
+	  <AssemblyVersion>10.2.4.0</AssemblyVersion>
+	  <FileVersion>10.2.4.0</FileVersion>
+	  <Version>10.2.4</Version>
 	  <PackageReadmeFile>README.md</PackageReadmeFile>
 	  <EnforceCodeStyleInBuild>True</EnforceCodeStyleInBuild>
 	  <AnalysisLevel>latest-all</AnalysisLevel>	 
@@ -44,13 +44,13 @@
 	</PropertyGroup>
 
 	<ItemGroup>
+	<None Include="README.md">
+	  <Pack>True</Pack>
+	  <PackagePath>\</PackagePath>
+	</None>
 	<None Include="..\LeadSoft.png" Link="LeadSoft.png">
 	  <PackagePath></PackagePath>
 	  <Pack>True</Pack>
-	</None>
-	<None Include="..\README.md">
-	  <Pack>True</Pack>
-	  <PackagePath>\</PackagePath>
 	</None>
   </ItemGroup>
 

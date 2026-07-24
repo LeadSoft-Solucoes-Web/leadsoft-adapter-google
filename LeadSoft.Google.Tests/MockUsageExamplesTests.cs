@@ -1,3 +1,5 @@
+using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
+
 namespace LeadSoft.Google.Tests;
 
 /// <summary>
@@ -11,7 +13,7 @@ public class MockUsageExamplesTests
     {
         var mock = new Mock<IReCAPTCHA>();
         mock.Setup(r => r.PostSiteVerifyAsync(It.IsAny<DTOSiteVerifyRequest>()))
-            .ReturnsAsync(new DTOSiteVerifyResponse { Success = true, Hostname = "mocked.host" });
+            .ReturnsAsync(new DTOSiteVerifyResponse(true, default, "mocked.host", null!));
 
         var result = await mock.Object.PostSiteVerifyAsync(new DTOSiteVerifyRequest("secret", "token"));
 
@@ -25,11 +27,7 @@ public class MockUsageExamplesTests
     {
         var mock = new Mock<IReCAPTCHA>();
         mock.Setup(r => r.PostSiteVerifyAsync(It.IsAny<DTOSiteVerifyRequest>()))
-            .ReturnsAsync(new DTOSiteVerifyResponse
-            {
-                Success = false,
-                ErrorCodes = new List<string> { "invalid-input-response" }
-            });
+            .ReturnsAsync(new DTOSiteVerifyResponse(false, default, string.Empty, new List<string> { "invalid-input-response" }));
 
         var result = await mock.Object.PostSiteVerifyAsync(new DTOSiteVerifyRequest("secret", "bad-token"));
 
@@ -80,7 +78,7 @@ public class MockUsageExamplesTests
         const string expectedSecret = "super-secret";
         var mock = new Mock<IReCAPTCHA>();
         mock.Setup(r => r.PostSiteVerifyAsync(It.Is<DTOSiteVerifyRequest>(dto => dto.Secret == expectedSecret)))
-            .ReturnsAsync(new DTOSiteVerifyResponse { Success = true });
+            .ReturnsAsync(new DTOSiteVerifyResponse(true, default, string.Empty, null!));
 
         var result = await mock.Object.PostSiteVerifyAsync(new DTOSiteVerifyRequest(expectedSecret, "token"));
 

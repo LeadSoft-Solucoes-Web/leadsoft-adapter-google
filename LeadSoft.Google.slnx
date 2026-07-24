@@ -4,5 +4,6 @@
     <File Path="README.md" />
   </Folder>
   <Project Path="LeadSoft.Adapter.Google.ReCaptcha/LeadSoft.Adapter.Google.ReCaptcha.csproj" />
+  <Project Path="LeadSoft.Adapter.Google.Workspace/LeadSoft.Adapter.Google.Workspace.csproj" Id="b021d4e9-85d6-42a4-a80c-61ee415c4aee" />
   <Project Path="LeadSoft.Google.Tests/LeadSoft.Google.Tests.csproj" />
 </Solution>

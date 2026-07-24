@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gerador de Token Google SSO | LeadSoft®</title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        :root {
+            --ls-dark:   #1a2538;
+            --ls-blue:   #1565c0;
+            --ls-accent: #1e88e5;
+            --ls-border: #1565c0;
+        }
+
+        body {
+            background-color: #f0f4f8;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .navbar-custom {
+            background-color: var(--ls-dark);
+            box-shadow: 0 2px 6px rgba(0,0,0,0.15);
+        }
+
+        .navbar-brand-text { font-weight: 600; letter-spacing: 0.02em; }
+        .navbar-brand-text span { color: var(--ls-accent); }
+
+        .main-content { flex: 1; padding: 40px 15px; }
+
+        .card-custom {
+            border: none;
+            border-top: 4px solid var(--ls-border);
+            border-radius: 10px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.07);
+            background-color: #ffffff;
+            padding: 32px;
+        }
+
+        .section-title  { color: var(--ls-dark); font-weight: 700; margin-bottom: 4px; }
+        .section-subtitle { color: #6c757d; font-size: 0.95rem; margin-bottom: 28px; }
+
+        textarea[readonly] {
+            background-color: #e9ecef;
+            color: #495057;
+            resize: vertical;
+            font-family: SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+            font-size: 0.82rem;
+        }
+
+        .btn-primary { background-color: var(--ls-blue); border-color: var(--ls-blue); }
+        .btn-primary:hover { background-color: var(--ls-accent); border-color: var(--ls-accent); }
+
+        .token-label {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 6px;
+        }
+        .token-label strong { font-size: 0.95rem; }
+
+        .docs-section { border-top: 1px solid #dee2e6; margin-top: 28px; padding-top: 20px; }
+        .docs-section h6 { color: var(--ls-dark); font-weight: 600; margin-bottom: 10px; }
+        .docs-section a  { color: var(--ls-accent); text-decoration: none; font-size: 0.9rem; }
+        .docs-section a:hover { text-decoration: underline; }
+
+        .footer {
+            background-color: var(--ls-dark);
+            color: #adb5bd;
+            text-align: center;
+            padding: 20px 0;
+            font-size: 0.85rem;
+            margin-top: auto;
+        }
+        .footer a { color: #90caf9; text-decoration: none; }
+        .footer a:hover { text-decoration: underline; }
+        .footer p { margin: 2px 0; }
+
+        .btn { font-weight: 500; }
+
+        /* Decoded JWT card */
+        .decoded-card {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 14px 18px;
+            margin-top: 8px;
+        }
+        .decoded-card .decoded-row {
+            display: flex;
+            gap: 10px;
+            font-size: 0.85rem;
+            padding: 3px 0;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .decoded-card .decoded-row:last-child { border-bottom: none; }
+        .decoded-card .decoded-key {
+            color: #6c757d;
+            min-width: 90px;
+            font-family: monospace;
+        }
+        .decoded-card .decoded-val { color: #212529; word-break: break-all; }
+
+        .scope-badge { font-size: 0.72rem; padding: 3px 7px; }
+    </style>
+</head>
+<body>
+
+    <nav class="navbar navbar-dark navbar-custom">
+        <div class="container">
+            <a class="navbar-brand d-flex align-items-center navbar-brand-text"
+               href="https://www.leadsoft.inf.br" target="_blank" rel="noopener noreferrer">
+                <img src="https://www.leadsoft.inf.br/favicon.ico" alt="" width="22" height="22"
+                     class="d-inline-block align-text-top me-2" onerror="this.style.display='none'">
+                LeadSoft<span>®</span>&nbsp;Google SSO Adapter
+            </a>
+            <span class="navbar-text d-none d-md-block text-light opacity-75">Developer Tools</span>
+        </div>
+    </nav>
+
+    <div class="main-content container d-flex justify-content-center align-items-start">
+        <div class="col-12 col-lg-8">
+
+            <!-- ═══════════════════════════════════════════ CONFIG ══ -->
+            <div id="section-config" class="card card-custom">
+
+                <h3 class="section-title">Gerador de Token Google SSO</h3>
+                <p class="section-subtitle">
+                    Utilitário para obter o <code>id_token</code> e o <code>access_token</code> do Google OAuth 2.0
+                    e usá-los como <code>TestIdToken</code> e <code>TestAccessToken</code> na
+                    <code>GoogleSSOFixture</code>.
+                </p>
+
+                <!-- Client ID -->
+                <div class="mb-3">
+                    <label for="client_id" class="form-label fw-bold">Client ID <span class="text-danger">*</span></label>
+                    <input type="text" id="client_id" class="form-control font-monospace"
+                           placeholder="Ex: 123456789-xxxxxxxx.apps.googleusercontent.com" />
+                    <div class="form-text">
+                        Encontrado em
+                        <a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">
+                        Google Cloud Console → Credenciais → OAuth 2.0 Client IDs</a>.
+                        Equivale à env var <code>GOOGLE_SSO_CLIENT_ID</code>.
+                    </div>
+                </div>
+
+                <!-- Redirect URI -->
+                <div class="mb-3">
+                    <label for="redirect_uri" class="form-label fw-bold">Redirect URI <span class="text-danger">*</span></label>
+                    <input type="text" id="redirect_uri" class="form-control font-monospace"
+                           placeholder="http://localhost:PORT/GoogleSSO.html" />
+                    <div class="form-text">
+                        URI exata cadastrada no Google Cloud Console para este Client ID.
+                        Deve ser servida via <code>http://</code> ou <code>https://</code> — não funciona com
+                        <code>file://</code>. Use <code>npx serve .</code> para servir esta pasta localmente.
+                    </div>
+                </div>
+
+                <!-- Hosted Domain -->
+                <div class="mb-4">
+                    <label for="hosted_domain" class="form-label fw-bold">
+                        Hosted Domain
+                        <span class="badge bg-secondary ms-1 scope-badge">opcional</span>
+                    </label>
+                    <input type="text" id="hosted_domain" class="form-control font-monospace"
+                           placeholder="Ex: suaempresa.com.br" />
+                    <div class="form-text">
+                        Restringe o login a contas de um domínio GSuite específico
+                        (equivale à env var <code>GOOGLE_SSO_HOSTED_DOMAIN</code>).
+                        Deixe em branco para aceitar qualquer conta Google.
+                    </div>
+                </div>
+
+                <!-- Scopes info -->
+                <div class="mb-4">
+                    <p class="fw-bold mb-2 fs-6">Escopos solicitados</p>
+                    <div class="d-flex flex-wrap gap-1">
+                        <span class="badge bg-primary scope-badge">openid</span>
+                        <span class="badge bg-primary scope-badge">email</span>
+                        <span class="badge bg-primary scope-badge">profile</span>
+                        <span class="badge bg-secondary scope-badge">user.birthday.read</span>
+                        <span class="badge bg-secondary scope-badge">user.phonenumbers.read</span>
+                    </div>
+                    <div class="form-text mt-1">
+                        Os escopos em cinza (<code>birthday</code>, <code>phonenumbers</code>) são necessários para
+                        testar <code>GetUserProfileAsync</code> com campos expandidos. Podem exigir verificação do app
+                        para contas externas ao seu projeto Google Cloud.
+                    </div>
+                </div>
+
+                <!-- Login button -->
+                <div class="d-grid">
+                    <button id="btn-login" class="btn btn-primary btn-lg d-flex align-items-center justify-content-center gap-2"
+                            onclick="doLogin()">
+                        <!-- Google "G" logo -->
+                        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="20" height="20">
+                            <path fill="#ffffff" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                            <path fill="#ffffff" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                            <path fill="#ffffff" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l3.66-2.84z"/>
+                            <path fill="#ffffff" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/>
+                        </svg>
+                        Entrar com Google
+                    </button>
+                </div>
+
+                <div class="docs-section">
+                    <h6>Documentação de referência</h6>
+                    <ul class="list-unstyled mb-0">
+                        <li><a href="https://developers.google.com/identity/openid-connect/openid-connect" target="_blank" rel="noopener noreferrer">🔗 Google Identity — OpenID Connect (Sign In with Google)</a></li>
+                        <li><a href="https://console.cloud.google.com/apis/credentials" target="_blank" rel="noopener noreferrer">🔗 Google Cloud Console — Credenciais OAuth 2.0</a></li>
+                        <li><a href="https://developers.google.com/people/api/rest/v1/people/get" target="_blank" rel="noopener noreferrer">🔗 Google People API — people.get</a></li>
+                        <li><a href="https://github.com/LeadSoft-Solucoes-Web/leadsoft-adapter-google" target="_blank" rel="noopener noreferrer">🔗 LeadSoft.Adapter.Google.Workspace — Repositório no GitHub</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════ RESULT ══ -->
+            <div id="section-result" class="card card-custom" style="display:none;">
+
+                <div class="d-flex justify-content-between align-items-start mb-1">
+                    <h3 class="section-title mb-0">Tokens obtidos</h3>
+                    <button class="btn btn-outline-secondary btn-sm" onclick="showConfig()">← Nova sessão</button>
+                </div>
+                <p class="section-subtitle">
+                    Cole estes valores nos campos correspondentes de <code>GoogleSSOFixture.cs</code>
+                    para habilitar os testes de integração.
+                </p>
+
+                <!-- ID Token -->
+                <div class="mb-4">
+                    <div class="token-label">
+                        <strong>ID Token &nbsp;<code class="fw-normal">TestIdToken</code></strong>
+                        <button class="btn btn-success btn-sm" onclick="copyValue('id_token_result')">Copiar</button>
+                    </div>
+                    <textarea id="id_token_result" class="form-control" rows="5" readonly
+                              placeholder="id_token não recebido..."></textarea>
+                    <div class="form-text">Use em <code>GetOAuthSSOAsync(TestIdToken)</code>.</div>
+
+                    <!-- Decoded JWT payload -->
+                    <div id="decoded-jwt" class="decoded-card" style="display:none;">
+                        <div class="fw-semibold mb-1" style="font-size:0.8rem; color:#6c757d;">Payload decodificado</div>
+                        <div id="decoded-rows"></div>
+                    </div>
+                </div>
+
+                <!-- Access Token -->
+                <div class="mb-4">
+                    <div class="token-label">
+                        <strong>Access Token &nbsp;<code class="fw-normal">TestAccessToken</code></strong>
+                        <button class="btn btn-success btn-sm" onclick="copyValue('access_token_result')">Copiar</button>
+                    </div>
+                    <textarea id="access_token_result" class="form-control" rows="4" readonly
+                              placeholder="access_token não recebido..."></textarea>
+                    <div class="form-text">Use em <code>GetUserProfileAsync(TestAccessToken)</code>.</div>
+                </div>
+
+                <!-- Expiry meta -->
+                <div id="token-meta" class="alert alert-info py-2 mb-3" role="alert" style="display:none;">
+                    <small id="token-meta-text"></small>
+                </div>
+
+                <div class="alert alert-warning py-2 mb-0" role="alert">
+                    <small>
+                        <strong>⚠ Atenção:</strong> Não faça <em>commit</em> destes tokens — são credenciais de acesso temporárias.
+                        Preencha-os apenas localmente na fixture e remova antes de qualquer push.
+                    </small>
+                </div>
+            </div>
+
+            <!-- ═══════════════════════════════════════════ ERROR ══ -->
+            <div id="section-error" class="card card-custom" style="display:none;">
+                <h3 class="section-title text-danger">Erro no login</h3>
+                <p class="section-subtitle" id="error-message">Ocorreu um erro durante o fluxo de autenticação.</p>
+                <button class="btn btn-primary" onclick="showConfig()">← Tentar novamente</button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="container">
+            <p>
+                <a href="https://www.leadsoft.inf.br" target="_blank" rel="noopener noreferrer">LeadSoft® Soluções Web</a>
+                &mdash; Google SSO Integration Adapter
+            </p>
+            <p>&copy; LeadSoft® 2026 &mdash; Todos os direitos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        const LS_CLIENT_ID    = 'leadsoft_sso_client_id';
+        const LS_REDIRECT_URI = 'leadsoft_sso_redirect_uri';
+        const LS_HOSTED_DOMAIN = 'leadsoft_sso_hosted_domain';
+
+        // ─── Init ─────────────────────────────────────────────────────────────────
+
+        (function init() {
+            restoreConfig();
+
+            const hash = window.location.hash.substring(1);
+            if (!hash) return;
+
+            const params = new URLSearchParams(hash);
+            // Clean the hash from the address bar immediately
+            history.replaceState(null, '', window.location.pathname + window.location.search);
+
+            const error = params.get('error');
+            if (error) {
+                showError(error, params.get('error_description'));
+                return;
+            }
+
+            const idToken     = params.get('id_token');
+            const accessToken = params.get('access_token');
+            const expiresIn   = params.get('expires_in');
+
+            if (!idToken && !accessToken) return; // not a callback
+
+            if (idToken) {
+                document.getElementById('id_token_result').value = idToken;
+                renderDecodedJwt(idToken);
+            }
+            if (accessToken) {
+                document.getElementById('access_token_result').value = accessToken;
+            }
+            if (expiresIn) {
+                const expDate = new Date(Date.now() + parseInt(expiresIn) * 1000);
+                const mins    = Math.round(expiresIn / 60);
+                document.getElementById('token-meta-text').innerHTML =
+                    `<strong>Validade:</strong> ~${mins} min — expira às ${expDate.toLocaleTimeString('pt-BR')}`;
+                document.getElementById('token-meta').style.display = '';
+            }
+
+            showSection('result');
+        })();
+
+        // ─── Config persistence ────────────────────────────────────────────────────
+
+        function restoreConfig() {
+            const savedId     = localStorage.getItem(LS_CLIENT_ID);
+            const savedUri    = localStorage.getItem(LS_REDIRECT_URI);
+            const savedDomain = localStorage.getItem(LS_HOSTED_DOMAIN);
+
+            if (savedId)     document.getElementById('client_id').value     = savedId;
+            if (savedDomain) document.getElementById('hosted_domain').value = savedDomain;
+
+            // Default redirect URI = current page URL (without hash)
+            document.getElementById('redirect_uri').value =
+                savedUri || (window.location.href.split('#')[0]);
+        }
+
+        // ─── Login ────────────────────────────────────────────────────────────────
+
+        function doLogin() {
+            const clientId    = document.getElementById('client_id').value.trim();
+            const redirectUri = document.getElementById('redirect_uri').value.trim();
+            const hostedDomain = document.getElementById('hosted_domain').value.trim();
+
+            if (!clientId) {
+                alert('Por favor, informe o Client ID.');
+                document.getElementById('client_id').focus();
+                return;
+            }
+            if (!redirectUri) {
+                alert('Por favor, informe o Redirect URI.');
+                document.getElementById('redirect_uri').focus();
+                return;
+            }
+
+            // Persist config (survives the redirect)
+            localStorage.setItem(LS_CLIENT_ID,     clientId);
+            localStorage.setItem(LS_REDIRECT_URI,  redirectUri);
+            localStorage.setItem(LS_HOSTED_DOMAIN, hostedDomain);
+
+            const nonce = Array.from(crypto.getRandomValues(new Uint8Array(16)))
+                              .map(b => b.toString(16).padStart(2, '0')).join('');
+
+            const scopes = [
+                'openid',
+                'email',
+                'profile',
+                'https://www.googleapis.com/auth/user.birthday.read',
+                'https://www.googleapis.com/auth/user.phonenumbers.read',
+            ].join(' ');
+
+            const qs = new URLSearchParams({
+                client_id:              clientId,
+                redirect_uri:           redirectUri,
+                response_type:          'token id_token',
+                scope:                  scopes,
+                nonce:                  nonce,
+                include_granted_scopes: 'true',
+                prompt:                 'select_account',
+            });
+
+            if (hostedDomain) qs.set('hd', hostedDomain);
+
+            const btn = document.getElementById('btn-login');
+            btn.innerHTML = `<span class="spinner-border spinner-border-sm" role="status" aria-hidden="true"></span>&nbsp;Redirecionando...`;
+            btn.disabled = true;
+
+            window.location.href = `https://accounts.google.com/o/oauth2/v2/auth?${qs}`;
+        }
+
+        // ─── JWT decode (display only — no signature verification) ───────────────
+
+        function renderDecodedJwt(token) {
+            try {
+                const parts = token.split('.');
+                if (parts.length !== 3) return;
+
+                const padded = parts[1].replace(/-/g, '+').replace(/_/g, '/');
+                const payload = JSON.parse(atob(padded));
+
+                const fields = [
+                    ['sub',   'ID',           payload.sub],
+                    ['email', 'E-mail',       payload.email],
+                    ['name',  'Nome',         payload.name],
+                    ['hd',    'Domínio (hd)', payload.hd   || '—'],
+                    ['iat',   'Emitido em',   payload.iat  ? new Date(payload.iat  * 1000).toLocaleString('pt-BR') : '—'],
+                    ['exp',   'Expira em',    payload.exp  ? new Date(payload.exp  * 1000).toLocaleString('pt-BR') : '—'],
+                ];
+
+                const container = document.getElementById('decoded-rows');
+                container.innerHTML = '';
+
+                fields.forEach(([key, label, val]) => {
+                    if (!val && val !== 0) return;
+                    const row = document.createElement('div');
+                    row.className = 'decoded-row';
+                    row.innerHTML = `<span class="decoded-key">${label}</span><span class="decoded-val">${escapeHtml(String(val))}</span>`;
+                    container.appendChild(row);
+                });
+
+                document.getElementById('decoded-jwt').style.display = '';
+            } catch (_) {
+                // silently ignore malformed token
+            }
+        }
+
+        // ─── Helpers ──────────────────────────────────────────────────────────────
+
+        function showSection(name) {
+            ['config', 'result', 'error'].forEach(s => {
+                document.getElementById(`section-${s}`).style.display = s === name ? '' : 'none';
+            });
+        }
+
+        function showConfig() { showSection('config'); }
+
+        function showError(error, description) {
+            let msg = `<strong>${escapeHtml(error)}</strong>`;
+            if (description) {
+                msg += ` — ${escapeHtml(decodeURIComponent(description.replace(/\+/g, ' ')))}`;
+            }
+            document.getElementById('error-message').innerHTML = msg;
+            showSection('error');
+        }
+
+        function copyValue(elementId) {
+            const val = document.getElementById(elementId).value;
+            if (!val) { alert('Campo vazio!'); return; }
+            navigator.clipboard.writeText(val)
+                .then(()  => alert('Copiado com sucesso!'))
+                .catch(()  => alert('Falha ao copiar. Selecione o texto manualmente.'));
+        }
+
+        function escapeHtml(str) {
+            return str.replace(/&/g, '&amp;')
+                      .replace(/</g, '&lt;')
+                      .replace(/>/g, '&gt;')
+                      .replace(/"/g, '&quot;');
+        }
+    </script>
+</body>
+</html>

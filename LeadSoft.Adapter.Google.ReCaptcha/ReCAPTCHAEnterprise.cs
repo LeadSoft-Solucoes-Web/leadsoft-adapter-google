@@ -1,4 +1,4 @@
-﻿using LeadSoft.Adapter.Google.ReCaptcha.DTOs;
+﻿using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 using LeadSoft.Common.Library;
 using LeadSoft.Common.Library.Extensions;
 using System.Reflection;
@@ -9,7 +9,15 @@ namespace LeadSoft.Adapter.Google.ReCaptcha;
 /// Implementação do adapter para integração com o Google reCAPTCHA Enterprise.
 /// Encapsula as chamadas HTTP à API de avaliação de eventos (<c>assessments</c>).
 /// </summary>
-public partial class ReCAPTCHAEnterprise : IReCAPTCHAEnterprise
+/// <remarks>
+/// Forneça as credenciais do reCAPTCHA Enterprise via variáveis de ambiente.
+/// <list type="bullet">
+///   <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_SITE_KEY</c></term><description>Chave pública do site reCAPTCHA Enterprise.</description></item>
+///   <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_PROJECT_ID</c></term><description>ID do projeto no Google Cloud.</description></item>
+///   <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_API_KEY</c></term><description>Chave de API do Google Cloud Console.</description></item>
+/// </list>
+/// </remarks>
+public sealed partial class ReCAPTCHAEnterprise : IReCAPTCHAEnterprise
 {
     private readonly HttpClient _Client = null;
 
@@ -49,11 +57,9 @@ public partial class ReCAPTCHAEnterprise : IReCAPTCHAEnterprise
 
         if (response.IsSuccessStatusCode)
             return await response.ReadContentToObjectAsync<DTOAssessmentResp>();
-        else
-        {
-            DTOAssessmentErrorResp error = await response.ReadContentToObjectAsync<DTOAssessmentErrorResp>();
-            return new(error.GetErrorMsg());
-        }
+
+        string errorBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
+        throw new InvalidOperationException(errorBody);
     }
 
     /// <inheritdoc/>

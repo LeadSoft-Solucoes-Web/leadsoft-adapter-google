@@ -1,10 +1,18 @@
-using LeadSoft.Adapter.Google.ReCaptcha.DTOs;
+using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 
 namespace LeadSoft.Adapter.Google.ReCaptcha;
 
 /// <summary>
 /// Define o contrato para integração com o serviço Google reCAPTCHA Enterprise.
 /// </summary>
+/// <remarks>
+/// Forneça as credenciais do reCAPTCHA Enterprise via variáveis de ambiente.
+/// <list type="bullet">
+///   <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_SITE_KEY</c></term><description>Chave pública do site reCAPTCHA Enterprise.</description></item>
+///   <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_PROJECT_ID</c></term><description>ID do projeto no Google Cloud.</description></item>
+///   <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_API_KEY</c></term><description>Chave de API do Google Cloud Console.</description></item>
+/// </list>
+/// </remarks>
 public interface IReCAPTCHAEnterprise : IDisposable
 {
     /// <summary>

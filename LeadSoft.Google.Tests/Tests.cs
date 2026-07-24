@@ -1,6 +1,6 @@
+using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 using LeadSoft.Google.Tests.Helpers;
 using Newtonsoft.Json;
-using System.Net;
 
 namespace LeadSoft.Google.Tests;
 

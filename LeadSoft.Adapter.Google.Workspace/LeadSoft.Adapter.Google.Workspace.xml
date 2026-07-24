@@ -1,0 +1,245 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>LeadSoft.Adapter.Google.Workspace</name>
+    </assembly>
+    <members>
+        <member name="T:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleLoginRequest">
+            <summary>
+            Representa a requisição de login via Google SSO enviada pelo cliente para o servidor.
+            Contém o ID Token emitido pelo Google após a autenticação do usuário no frontend.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleLoginRequest.#ctor">
+            <summary>
+            Representa a requisição de login via Google SSO enviada pelo cliente para o servidor.
+            Contém o ID Token emitido pelo Google após a autenticação do usuário no frontend.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleLoginRequest.IdToken">
+            <summary>
+            Token JWT emitido pelo Google OAuth2 após a autenticação do usuário.
+            Deve ser enviado ao servidor para validação via <c>IGoogleSSO.GetOAuthSSOAsync</c>.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleLoginRequest.Email">
+            <summary>
+            Endereço de e-mail do usuário, conforme retornado pelo Google.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleLoginRequest.Name">
+            <summary>
+            Nome completo do usuário, conforme retornado pelo Google.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleLoginRequest.Picture">
+            <summary>
+            URL da foto de perfil do usuário, conforme retornada pelo Google.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleLoginRequest.PhoneNumber">
+            <summary>
+            Número de telefone do usuário. Opcional.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleLoginRequest.Birthday">
+            <summary>
+            Data de nascimento do usuário. Opcional.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserExpandedResponse">
+            <summary>
+            Representa o perfil expandido do usuário autenticado via Google People API.
+            Retornado por <c>IGoogleSSO.GetUserProfileAsync</c> quando disponível.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserExpandedResponse.#ctor(System.String,System.String,System.String,System.String,System.String,System.Nullable{System.DateTime})">
+            <summary>
+            Representa o perfil expandido do usuário autenticado via Google People API.
+            Retornado por <c>IGoogleSSO.GetUserProfileAsync</c> quando disponível.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserExpandedResponse.Id">
+            <summary>
+            Identificador único do usuário no Google (campo <c>resourceName</c> da People API, sem o prefixo <c>people/</c>).
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserExpandedResponse.Email">
+            <summary>
+            Endereço de e-mail principal do usuário.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserExpandedResponse.Name">
+            <summary>
+            Nome de exibição completo do usuário.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserExpandedResponse.Picture">
+            <summary>
+            URL da foto de perfil do usuário.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserExpandedResponse.PhoneNumber">
+            <summary>
+            Número de telefone do usuário, quando cadastrado e disponível. Opcional.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserExpandedResponse.Birthday">
+            <summary>
+            Data de nascimento do usuário, quando cadastrada e disponível. Opcional.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserResponse">
+            <summary>
+            Representa as informações básicas do usuário autenticado via Google SSO.
+            Retornado por <c>IGoogleSSO.GetOAuthSSOAsync</c> após validação bem-sucedida do ID Token.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserResponse.#ctor(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            Representa as informações básicas do usuário autenticado via Google SSO.
+            Retornado por <c>IGoogleSSO.GetOAuthSSOAsync</c> após validação bem-sucedida do ID Token.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserResponse.Id">
+            <summary>
+            Identificador único do usuário no Google (campo <c>sub</c> do JWT).
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserResponse.Email">
+            <summary>
+            Endereço de e-mail do usuário autenticado.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserResponse.Name">
+            <summary>
+            Nome completo do usuário autenticado.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserResponse.Picture">
+            <summary>
+            URL da foto de perfil do usuário.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserResponse.Domain">
+            <summary>
+            Domínio do Google Workspace ao qual o usuário pertence (ex.: <c>empresa.com</c>).
+            Vazio quando o usuário é uma conta pessoal do Google (<c>@gmail.com</c>).
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.Workspace.EnvVariable">
+            <summary>
+              A strongly-typed resource class, for looking up localized strings, etc.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.EnvVariable.ResourceManager">
+            <summary>
+              Returns the cached ResourceManager instance used by this class.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.EnvVariable.Culture">
+            <summary>
+              Overrides the current thread's CurrentUICulture property for all
+              resource lookups using this strongly typed resource class.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.EnvVariable.Google_SSO_Client_Id">
+            <summary>
+              Looks up a localized string similar to GOOGLE_SSO_CLIENT_ID.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.EnvVariable.Google_SSO_Client_Secret">
+            <summary>
+              Looks up a localized string similar to GOOGLE_SSO_CLIENT_SECRET.
+            </summary>
+        </member>
+        <member name="P:LeadSoft.Adapter.Google.Workspace.EnvVariable.Google_SSO_Hosted_Domain">
+            <summary>
+              Looks up a localized string similar to GOOGLE_SSO_HOSTED_DOMAIN.
+            </summary>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.Workspace.GoogleSSO">
+            <summary>
+            Implementação do adapter para autenticação via Google SSO (Single Sign-On) e acesso à People API.
+            Encapsula a validação de ID Token (<c>GoogleJsonWebSignature</c>) e a consulta ao perfil expandido do usuário.
+            </summary>
+            <remarks>
+            Variáveis de ambiente requeridas:
+            <list type="bullet">
+              <item><description><c>GOOGLE_SSO_CLIENT_ID</c> — Client ID do projeto OAuth2 no Google Cloud Console.</description></item>
+              <item><description><c>GOOGLE_SSO_CLIENT_SECRET</c> — Client Secret do projeto OAuth2 no Google Cloud Console.</description></item>
+              <item><description><c>GOOGLE_SSO_HOSTED_DOMAIN</c> — (Opcional) Domínio Workspace permitido (ex.: <c>empresa.com</c>). Quando definido, bloqueia contas fora do domínio.</description></item>
+            </list>
+            </remarks>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.Workspace.GoogleSSO.GetOAuthSSOAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.Workspace.GoogleSSO.GetUserProfileAsync(System.String,System.Threading.CancellationToken)">
+            <inheritdoc/>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.Workspace.GoogleSSO.Dispose">
+            <inheritdoc/>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.Workspace.IGoogleSSO">
+            <summary>
+            Define o contrato para autenticação via Google SSO (Single Sign-On) e consulta ao perfil do usuário.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.Workspace.IGoogleSSO.GetOAuthSSOAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Valida um ID Token do Google e retorna as informações básicas do usuário autenticado.
+            </summary>
+            <remarks>
+            Variáveis de ambiente requeridas:
+            <list type="bullet">
+              <item><description><c>GOOGLE_SSO_CLIENT_ID</c> — Client ID do projeto OAuth2 no Google Cloud Console.</description></item>
+              <item><description><c>GOOGLE_SSO_CLIENT_SECRET</c> — Client Secret do projeto OAuth2 no Google Cloud Console.</description></item>
+              <item><description><c>GOOGLE_SSO_HOSTED_DOMAIN</c> — (Opcional) Domínio Workspace permitido (ex.: <c>empresa.com</c>). Quando definido, bloqueia contas fora do domínio.</description></item>
+            </list>
+            </remarks>
+            <param name="idToken">Token JWT emitido pelo Google OAuth após o login do usuário.</param>
+            <param name="cancellationToken">Token de cancelamento da operação assíncrona.</param>
+            <returns>
+            Um <see cref="T:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserResponse"/> com os dados do usuário autenticado.
+            </returns>
+            <exception cref="T:LeadSoft.Common.Library.Exceptions.BadRequestAppException">Lançada quando o token é nulo, vazio ou a validação falha de forma inesperada.</exception>
+            <exception cref="T:LeadSoft.Common.Library.Exceptions.UnauthorizedAppException">Lançada quando o token JWT é inválido ou expirou.</exception>
+            <exception cref="T:LeadSoft.Common.Library.Exceptions.ForbiddenAppException">Lançada quando o domínio do usuário não corresponde ao domínio Workspace configurado.</exception>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.Workspace.IGoogleSSO.GetUserProfileAsync(System.String,System.Threading.CancellationToken)">
+            <summary>
+            Consulta o perfil expandido do usuário autenticado via Google People API.
+            </summary>
+            <param name="accessToken">Access Token OAuth2 obtido após a autenticação do usuário.</param>
+            <param name="cancellationToken">Token de cancelamento da operação assíncrona.</param>
+            <returns>
+            Um <see cref="T:LeadSoft.Adapter.Google.Workspace.Contracts.DTOGoogleUserExpandedResponse"/> com informações detalhadas do usuário,
+            ou <see langword="null"/> se o acesso falhar ou o token for inválido.
+            </returns>
+        </member>
+        <member name="T:LeadSoft.Adapter.Google.Workspace.Injection">
+            <summary>
+            Extensões de injeção de dependência para os serviços do Google Workspace.
+            </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.Workspace.Injection.AddGoogleSSOApi(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Boolean)">
+            <summary>
+            Registra o serviço de SSO do Google Workspace no <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
+            </summary>
+            <param name="services">A coleção de serviços onde o adapter será registrado.</param>
+            <param name="useSingleton">
+            <see langword="true"/> para registrar como singleton (compartilhado em toda a aplicação);
+            <see langword="false"/> para registrar como scoped (por requisição). Padrão: <see langword="false"/>.
+            </param>
+            <remarks>
+            Variáveis de ambiente requeridas:
+            <list type="bullet">
+              <item><description><c>GOOGLE_SSO_CLIENT_ID</c> — Client ID do projeto OAuth2 no Google Cloud Console.</description></item>
+              <item><description><c>GOOGLE_SSO_CLIENT_SECRET</c> — Client Secret do projeto OAuth2 no Google Cloud Console.</description></item>
+              <item><description><c>GOOGLE_SSO_HOSTED_DOMAIN</c> — (Opcional) Domínio Workspace permitido (ex.: <c>empresa.com</c>). Quando definido, bloqueia contas fora do domínio.</description></item>
+            </list>
+            </remarks>
+        </member>
+    </members>
+</doc>

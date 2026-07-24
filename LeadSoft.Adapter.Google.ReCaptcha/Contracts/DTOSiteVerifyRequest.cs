@@ -1,7 +1,7 @@
 using Newtonsoft.Json;
 using System.ComponentModel;
 
-namespace LeadSoft.Adapter.Google.ReCaptcha.DTOs;
+namespace LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 
 /// <summary>
 /// DTO de requisição para verificação de token do Google reCAPTCHA v3.

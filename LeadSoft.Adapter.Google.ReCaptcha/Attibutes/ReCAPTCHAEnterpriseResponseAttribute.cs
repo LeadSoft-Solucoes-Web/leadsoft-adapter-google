@@ -1,4 +1,4 @@
-using LeadSoft.Adapter.Google.ReCaptcha.DTOs;
+using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 using LeadSoft.Common.Library.EnvUtils;
 using LeadSoft.Common.Library.Extensions;
 using System.ComponentModel.DataAnnotations;
