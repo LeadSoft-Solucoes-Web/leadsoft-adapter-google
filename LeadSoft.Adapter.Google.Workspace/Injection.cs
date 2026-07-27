@@ -23,7 +23,7 @@ public static class Injection
     ///   <item><description><c>GOOGLE_SSO_HOSTED_DOMAIN</c> — (Opcional) Domínio Workspace permitido (ex.: <c>empresa.com</c>). Quando definido, bloqueia contas fora do domínio.</description></item>
     /// </list>
     /// </remarks>
-    public static void AddGoogleSSOApi(this IServiceCollection services, bool useSingleton = false)
+    public static void AddGoogleSSO(this IServiceCollection services, bool useSingleton = false)
     {
         if (useSingleton)
             services.AddSingleton<IGoogleSSO, GoogleSSO>();

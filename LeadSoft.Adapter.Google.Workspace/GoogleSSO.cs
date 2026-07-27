@@ -53,13 +53,13 @@ public sealed partial class GoogleSSO : IGoogleSSO
         {
             throw;
         }
-        catch (InvalidJwtException)
+        catch (InvalidJwtException e)
         {
-            throw new UnauthorizedAppException("Token do Google inválido ou expirado.");
+            throw new UnauthorizedAppException($"Token do Google inválido ou expirado. {e.Message}");
         }
-        catch (Exception)
+        catch (Exception e)
         {
-            throw new BadRequestAppException("Erro inesperado ao validar token do Google.");
+            throw new BadRequestAppException($"Erro inesperado ao validar token do Google. {e.Message}");
         }
     }
 

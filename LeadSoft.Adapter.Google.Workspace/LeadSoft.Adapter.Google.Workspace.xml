@@ -223,7 +223,7 @@
             Extensões de injeção de dependência para os serviços do Google Workspace.
             </summary>
         </member>
-        <member name="M:LeadSoft.Adapter.Google.Workspace.Injection.AddGoogleSSOApi(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Boolean)">
+        <member name="M:LeadSoft.Adapter.Google.Workspace.Injection.AddGoogleSSO(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Boolean)">
             <summary>
             Registra o serviço de SSO do Google Workspace no <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
             </summary>

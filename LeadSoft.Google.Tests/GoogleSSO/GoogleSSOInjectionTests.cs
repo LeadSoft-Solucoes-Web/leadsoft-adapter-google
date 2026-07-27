@@ -7,7 +7,7 @@ public class GoogleSSOInjectionTests
     {
         var services = new ServiceCollection();
 
-        services.AddGoogleSSOApi();
+        services.AddGoogleSSO();
 
         var descriptor = services.Single(d => d.ServiceType == typeof(IGoogleSSO));
         Assert.Equal(ServiceLifetime.Scoped, descriptor.Lifetime);
@@ -19,7 +19,7 @@ public class GoogleSSOInjectionTests
     {
         var services = new ServiceCollection();
 
-        services.AddGoogleSSOApi(useSingleton: true);
+        services.AddGoogleSSO(useSingleton: true);
 
         var descriptor = services.Single(d => d.ServiceType == typeof(IGoogleSSO));
         Assert.Equal(ServiceLifetime.Singleton, descriptor.Lifetime);
@@ -29,7 +29,7 @@ public class GoogleSSOInjectionTests
     public void AddGoogleSSOApi_ResolvedInstance_IsTypeGoogleSSO()
     {
         var services = new ServiceCollection();
-        services.AddGoogleSSOApi();
+        services.AddGoogleSSO();
         using var provider = services.BuildServiceProvider();
         using var scope = provider.CreateScope();
 
@@ -42,7 +42,7 @@ public class GoogleSSOInjectionTests
     public void AddGoogleSSOApi_SingletonResolvedInstance_IsTypeGoogleSSO()
     {
         var services = new ServiceCollection();
-        services.AddGoogleSSOApi(useSingleton: true);
+        services.AddGoogleSSO(useSingleton: true);
         using var provider = services.BuildServiceProvider();
 
         using var sso = provider.GetRequiredService<IGoogleSSO>();
@@ -56,8 +56,8 @@ public class GoogleSSOInjectionTests
         // Comportamento esperado de IServiceCollection: não deduplica por padrão
         var services = new ServiceCollection();
 
-        services.AddGoogleSSOApi();
-        services.AddGoogleSSOApi();
+        services.AddGoogleSSO();
+        services.AddGoogleSSO();
 
         Assert.Equal(2, services.Count(d => d.ServiceType == typeof(IGoogleSSO)));
     }
@@ -66,7 +66,7 @@ public class GoogleSSOInjectionTests
     public void AddGoogleSSOApi_ScopedInstance_NotSameAcrossScopes()
     {
         var services = new ServiceCollection();
-        services.AddGoogleSSOApi();
+        services.AddGoogleSSO();
         using var provider = services.BuildServiceProvider();
 
         IGoogleSSO sso1, sso2;
@@ -83,7 +83,7 @@ public class GoogleSSOInjectionTests
     public void AddGoogleSSOApi_SingletonInstance_SameAcrossResolutions()
     {
         var services = new ServiceCollection();
-        services.AddGoogleSSOApi(useSingleton: true);
+        services.AddGoogleSSO(useSingleton: true);
         using var provider = services.BuildServiceProvider();
 
         var sso1 = provider.GetRequiredService<IGoogleSSO>();
