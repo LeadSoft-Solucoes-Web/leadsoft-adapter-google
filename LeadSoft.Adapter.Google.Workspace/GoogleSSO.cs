@@ -3,6 +3,7 @@ using Google.Apis.Auth.OAuth2;
 using Google.Apis.PeopleService.v1;
 using Google.Apis.PeopleService.v1.Data;
 using LeadSoft.Adapter.Google.Workspace.Contracts;
+using LeadSoft.Common.GlobalDomain.Entities;
 using LeadSoft.Common.Library.EnvUtils;
 using LeadSoft.Common.Library.Exceptions;
 using LeadSoft.Common.Library.Extensions;
@@ -46,10 +47,14 @@ public sealed partial class GoogleSSO : IGoogleSSO
             {
                 string[] allowed = hostedDomainEnv.Split(',', StringSplitOptions.RemoveEmptyEntries | StringSplitOptions.TrimEntries);
 
-                bool isWorkspace = allowed.Contains(payload.HostedDomain, StringComparer.OrdinalIgnoreCase);
-                bool isGmail     = allowed.Contains(IGoogleSSO.GmailDomain, StringComparer.OrdinalIgnoreCase)
+                bool isWorkspace = allowed.Contains(payload.HostedDomain, StringComparer.OrdinalIgnoreCase) ||
+                                    (payload.HostedDomain.IsNothing() &&
+                                     payload.Email?.GetDomain().Equals(IGoogleSSO.GmailDomain, StringComparison.OrdinalIgnoreCase) == false &&
+                                     allowed.Contains(payload.Email?.GetDomain(), StringComparer.OrdinalIgnoreCase) == true);
+
+                bool isGmail = allowed.Contains(IGoogleSSO.GmailDomain, StringComparer.OrdinalIgnoreCase)
                                    && payload.HostedDomain.IsNothing()
-                                   && payload.Email?.EndsWith($"@{IGoogleSSO.GmailDomain}", StringComparison.OrdinalIgnoreCase) == true;
+                                   && payload.Email?.GetDomain().Equals(IGoogleSSO.GmailDomain, StringComparison.OrdinalIgnoreCase) == true;
 
                 if (!isWorkspace && !isGmail)
                     throw new ForbiddenAppException($"Tentativa de login bloqueada: domínio '{payload.HostedDomain ?? payload.Email}' não está na lista de domínios autorizados.");
