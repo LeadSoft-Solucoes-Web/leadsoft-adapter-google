@@ -15,7 +15,7 @@ Fornece uma camada leve, testável e orientada a interfaces para validação de 
 ## Principais características
 - Compatível com .NET 10.0.
 - Autenticação SSO via Google OAuth2 com validação de ID Token JWT.
-- Suporte a restrição de domínio Workspace (bloqueia contas pessoais `@gmail.com`).
+- Suporte a lista de domínios permitidos (Workspace e/ou contas pessoais `@gmail.com`).
 - Consulta ao perfil expandido do usuário via Google People API (nome, foto, telefone, aniversário).
 - Chamadas assíncronas com `async`/`await`.
 - Fácil integração com injeção de dependência (`IServiceCollection`).
@@ -29,7 +29,20 @@ Fornece uma camada leve, testável e orientada a interfaces para validação de 
 |----------|-------------|-----------|
 | `GOOGLE_SSO_CLIENT_ID` | Sim | Client ID do projeto OAuth2 no Google Cloud Console. |
 | `GOOGLE_SSO_CLIENT_SECRET` | Sim | Client Secret do projeto OAuth2 no Google Cloud Console. |
-| `GOOGLE_SSO_HOSTED_DOMAIN` | Não | Domínio Workspace permitido (ex.: `empresa.com`). Quando definido, bloqueia contas fora do domínio. |
+| `GOOGLE_SSO_HOSTED_DOMAIN` | Não | Lista de domínios permitidos separados por vírgula. Quando definido, bloqueia contas fora da lista. Ver detalhes abaixo. |
+
+#### Detalhes de `GOOGLE_SSO_HOSTED_DOMAIN`
+
+Aceita um ou mais domínios separados por vírgula. Inclua `gmail.com` para aceitar contas pessoais do Google.
+
+| Valor | Comportamento |
+|-------|---------------|
+| _(não definido)_ | Aceita qualquer conta Google. |
+| `empresa.com` | Aceita apenas contas do domínio Workspace `empresa.com`. |
+| `empresa.com,parceiro.com` | Aceita contas dos domínios Workspace `empresa.com` e `parceiro.com`. |
+| `empresa.com,gmail.com` | Aceita contas Workspace de `empresa.com` **e** contas pessoais `@gmail.com`. |
+
+> **Nota técnica:** contas `@gmail.com` não possuem o campo `HostedDomain` no token JWT do Google. O adapter identifica essas contas pelo campo `email` do token — que é assinado e verificado pelo Google, portanto não é spoofável.
 
 ## Métodos disponíveis
 
@@ -38,7 +51,7 @@ Fornece uma camada leve, testável e orientada a interfaces para validação de 
 - `Task<DTOGoogleUserResponse?> GetOAuthSSOAsync(string idToken, CancellationToken cancellationToken = default)`
     - Valida o ID Token JWT emitido pelo Google após o login do usuário.
     - Verifica assinatura, expiração e Client ID automaticamente via SDK do Google.
-    - Opcionalmente restringe login a um domínio Workspace específico.
+    - Opcionalmente restringe login a uma lista de domínios (Workspace e/ou `@gmail.com`).
     - Lança `UnauthorizedAppException` quando o token é inválido ou expirou.
     - Lança `ForbiddenAppException` quando o domínio do usuário não é permitido.
 
@@ -123,7 +136,7 @@ public class PerfilService(IGoogleSSO googleSSO)
 
 ## Configuração recomendada
 - Configure `GOOGLE_SSO_CLIENT_ID` via variáveis de ambiente ou cofre seguro (Azure Key Vault, AWS Secrets Manager) — nunca em código-fonte.
-- Defina `GOOGLE_SSO_HOSTED_DOMAIN` para restringir o login somente a usuários do seu domínio Workspace corporativo.
+- Defina `GOOGLE_SSO_HOSTED_DOMAIN` para restringir o login. Use vírgula para múltiplos domínios; inclua `gmail.com` para aceitar também contas pessoais do Google.
 - Propague `CancellationToken` em todas as chamadas assíncronas.
 - Capture e logue erros com `ILogger<T>` para diagnóstico e rastreabilidade.
 

@@ -20,7 +20,11 @@ public static class Injection
     /// <list type="bullet">
     ///   <item><description><c>GOOGLE_SSO_CLIENT_ID</c> — Client ID do projeto OAuth2 no Google Cloud Console.</description></item>
     ///   <item><description><c>GOOGLE_SSO_CLIENT_SECRET</c> — Client Secret do projeto OAuth2 no Google Cloud Console.</description></item>
-    ///   <item><description><c>GOOGLE_SSO_HOSTED_DOMAIN</c> — (Opcional) Domínio Workspace permitido (ex.: <c>empresa.com</c>). Quando definido, bloqueia contas fora do domínio.</description></item>
+    ///   <item><description>
+    ///     <c>GOOGLE_SSO_HOSTED_DOMAIN</c> — (Opcional) Lista de domínios permitidos separados por vírgula
+    ///     (ex.: <c>empresa.com,parceiro.com</c>). Inclua <c>gmail.com</c> para aceitar também contas pessoais do Google
+    ///     (ex.: <c>empresa.com,gmail.com</c>). Quando definido, bloqueia contas fora da lista.
+    ///   </description></item>
     /// </list>
     /// </remarks>
     public static void AddGoogleSSO(this IServiceCollection services, bool useSingleton = false)
