@@ -1,5 +1,6 @@
 ﻿using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 using LeadSoft.Common.Library;
+using LeadSoft.Common.Library.Exceptions;
 using LeadSoft.Common.Library.Extensions;
 using System.Reflection;
 
@@ -46,11 +47,27 @@ public sealed partial class ReCAPTCHA : IReCAPTCHA
     }
 
     /// <inheritdoc/>
-    public async Task<DTOSiteVerifyResponse> PostSiteVerifyAsync(DTOSiteVerifyRequest aDtoRequest) =>
-        await (await HttpCall.SendAsync(_Client, HttpMethod.Post, string.Format(Google_ReCaptcha_EndPoint.Post_SiteVerify_v1,
+    public async Task<DTOSiteVerifyResponse> PostSiteVerifyAsync(DTOSiteVerifyRequest aDtoRequest)
+    {
+
+        HttpResponseMessage response = await HttpCall.SendAsync(_Client, HttpMethod.Post, string.Format(Google_ReCaptcha_EndPoint.Post_SiteVerify_v1,
                                                                                 aDtoRequest.Secret,
                                                                                 aDtoRequest.Response,
-                                                                                aDtoRequest.RemoteIp))).ReadContentToObjectAsync<DTOSiteVerifyResponse>();
+                                                                                aDtoRequest.RemoteIp));
+
+        try
+        {
+            if (response.IsSuccessStatusCode)
+                return await response.ReadContentToObjectAsync<DTOSiteVerifyResponse>();
+
+            DTOAssessmentErrorResp error = await response.ReadContentToObjectAsync<DTOAssessmentErrorResp>().ConfigureAwait(false);
+            throw new BadRequestAppException($"{error.Code} {error.Status}: {error.Message}");
+        }
+        catch (Exception ex)
+        {
+            throw new AppException(ex.Message, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        }
+    }
 
     /// <inheritdoc/>
     public void Dispose()

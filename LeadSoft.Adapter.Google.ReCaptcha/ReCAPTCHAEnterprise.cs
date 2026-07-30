@@ -1,5 +1,6 @@
 ﻿using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 using LeadSoft.Common.Library;
+using LeadSoft.Common.Library.Exceptions;
 using LeadSoft.Common.Library.Extensions;
 using System.Reflection;
 
@@ -55,11 +56,18 @@ public sealed partial class ReCAPTCHAEnterprise : IReCAPTCHAEnterprise
             Google_ReCaptcha_Enterprise_EndPoint.Post_Assessment.Fill(apiKey),
             aObject: aDtoRequest);
 
-        if (response.IsSuccessStatusCode)
-            return await response.ReadContentToObjectAsync<DTOAssessmentResp>();
+        try
+        {
+            if (response.IsSuccessStatusCode)
+                return await response.ReadContentToObjectAsync<DTOAssessmentResp>();
 
-        string errorBody = await response.Content.ReadAsStringAsync().ConfigureAwait(false);
-        throw new InvalidOperationException(errorBody);
+            DTOAssessmentErrorResp error = await response.ReadContentToObjectAsync<DTOAssessmentErrorResp>().ConfigureAwait(false);
+            throw new BadRequestAppException($"{error.Code} {error.Status}: {error.Message}");
+        }
+        catch (Exception ex)
+        {
+            throw new AppException(ex.Message, await response.Content.ReadAsStringAsync().ConfigureAwait(false));
+        }
     }
 
     /// <inheritdoc/>
