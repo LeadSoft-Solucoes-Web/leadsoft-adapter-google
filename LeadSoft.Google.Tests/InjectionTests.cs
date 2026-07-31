@@ -9,7 +9,7 @@ public class InjectionTests
     {
         var services = new ServiceCollection();
 
-        services.AddReCAPTCHAApi();
+        services.AddReCAPTCHA();
 
         var descriptor = services.Single(d => d.ServiceType == typeof(IReCAPTCHA));
         Assert.Equal(ServiceLifetime.Scoped, descriptor.Lifetime);
@@ -21,7 +21,7 @@ public class InjectionTests
     {
         var services = new ServiceCollection();
 
-        services.AddReCAPTCHAApi(useSingleton: true);
+        services.AddReCAPTCHA(useSingleton: true);
 
         var descriptor = services.Single(d => d.ServiceType == typeof(IReCAPTCHA));
         Assert.Equal(ServiceLifetime.Singleton, descriptor.Lifetime);
@@ -32,7 +32,7 @@ public class InjectionTests
     {
         var services = new ServiceCollection();
 
-        services.AddReCAPTCHAEnterpriseApi("my-project");
+        services.AddReCAPTCHAEnterprise("my-project");
 
         var descriptor = services.Single(d => d.ServiceType == typeof(IReCAPTCHAEnterprise));
         Assert.Equal(ServiceLifetime.Scoped, descriptor.Lifetime);
@@ -43,7 +43,7 @@ public class InjectionTests
     {
         var services = new ServiceCollection();
 
-        services.AddReCAPTCHAEnterpriseApi("my-project", useSingleton: true);
+        services.AddReCAPTCHAEnterprise("my-project", useSingleton: true);
 
         var descriptor = services.Single(d => d.ServiceType == typeof(IReCAPTCHAEnterprise));
         Assert.Equal(ServiceLifetime.Singleton, descriptor.Lifetime);
@@ -53,7 +53,7 @@ public class InjectionTests
     public void AddReCAPTCHAEnterpriseApi_ResolvedInstance_IsTypeReCAPTCHAEnterprise()
     {
         var services = new ServiceCollection();
-        services.AddReCAPTCHAEnterpriseApi("my-project");
+        services.AddReCAPTCHAEnterprise("my-project");
         using var provider = services.BuildServiceProvider();
 
         using var enterprise = provider.GetRequiredService<IReCAPTCHAEnterprise>();
@@ -65,7 +65,7 @@ public class InjectionTests
     public void AddReCAPTCHAApi_ResolvedInstance_IsTypeReCAPTCHA()
     {
         var services = new ServiceCollection();
-        services.AddReCAPTCHAApi();
+        services.AddReCAPTCHA();
         using var provider = services.BuildServiceProvider();
         using var scope = provider.CreateScope();
 

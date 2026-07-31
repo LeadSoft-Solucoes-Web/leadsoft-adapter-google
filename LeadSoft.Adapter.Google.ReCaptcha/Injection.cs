@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace LeadSoft.Adapter.Google.ReCaptcha;
 
@@ -15,12 +16,14 @@ public static class Injection
     /// <see langword="true"/> para registrar como singleton (compartilhado em toda a aplicação);
     /// <see langword="false"/> para registrar como scoped (por requisição). Padrão: <see langword="false"/>.
     /// </param>
-    public static void AddReCAPTCHAApi(this IServiceCollection services, bool useSingleton = false)
+    public static void AddReCAPTCHA(this IServiceCollection services, bool useSingleton = false)
     {
         if (useSingleton)
-            services.AddSingleton<IReCAPTCHA, ReCAPTCHA>();
+            services.AddSingleton<IReCAPTCHA>(sp =>
+                new ReCAPTCHA(sp.GetService<ILogger<ReCAPTCHA>>()));
         else
-            services.AddScoped<IReCAPTCHA, ReCAPTCHA>();
+            services.AddScoped<IReCAPTCHA>(sp =>
+                new ReCAPTCHA(sp.GetService<ILogger<ReCAPTCHA>>()));
     }
 
     /// <summary>
@@ -32,11 +35,13 @@ public static class Injection
     /// <see langword="true"/> para registrar como singleton (compartilhado em toda a aplicação);
     /// <see langword="false"/> para registrar como scoped (por requisição). Padrão: <see langword="false"/>.
     /// </param>
-    public static void AddReCAPTCHAEnterpriseApi(this IServiceCollection services, string projectId, bool useSingleton = false)
+    public static void AddReCAPTCHAEnterprise(this IServiceCollection services, string projectId, bool useSingleton = false)
     {
         if (useSingleton)
-            services.AddSingleton<IReCAPTCHAEnterprise>(_ => new ReCAPTCHAEnterprise(projectId));
+            services.AddSingleton<IReCAPTCHAEnterprise>(sp =>
+                new ReCAPTCHAEnterprise(projectId, sp.GetService<ILogger<ReCAPTCHAEnterprise>>()));
         else
-            services.AddScoped<IReCAPTCHAEnterprise>(_ => new ReCAPTCHAEnterprise(projectId));
+            services.AddScoped<IReCAPTCHAEnterprise>(sp =>
+                new ReCAPTCHAEnterprise(projectId, sp.GetService<ILogger<ReCAPTCHAEnterprise>>()));
     }
 }

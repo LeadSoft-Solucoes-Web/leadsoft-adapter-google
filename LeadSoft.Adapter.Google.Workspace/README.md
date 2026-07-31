@@ -21,6 +21,9 @@ Fornece uma camada leve, testável e orientada a interfaces para validação de 
 - Fácil integração com injeção de dependência (`IServiceCollection`).
 - Interface `IGoogleSSO` para facilitar testes e mocking.
 - Suporte a registro como `Scoped` ou `Singleton`.
+- Tratamento centralizado de erros com `AppException` e derivações — mensagens amigáveis para o chamador.
+- Logging integrado via `ILogger<T>` com suporte opcional por DI — sem logs quando não configurado.
+- Stack traces nos logs apenas em ambientes não-produtivos (`ASPNETCORE_ENVIRONMENT != Production`).
 - Open Source (MIT License).
 
 ## Variáveis de ambiente
@@ -54,11 +57,12 @@ Aceita um ou mais domínios separados por vírgula. Inclua `gmail.com` para acei
     - Opcionalmente restringe login a uma lista de domínios (Workspace e/ou `@gmail.com`).
     - Lança `UnauthorizedAppException` quando o token é inválido ou expirou.
     - Lança `ForbiddenAppException` quando o domínio do usuário não é permitido.
+    - Lança `BadRequestAppException` para erros de entrada inesperados.
 
 - `Task<DTOGoogleUserExpandedResponse?> GetUserProfileAsync(string accessToken, CancellationToken cancellationToken = default)`
     - Consulta o perfil detalhado do usuário autenticado via Google People API.
     - Retorna dados como telefone e data de nascimento, quando disponíveis.
-    - Retorna `null` em caso de falha ou token inválido, sem lançar exceções.
+    - Retorna `null` em caso de falha — erros são registrados em log, sem lançar exceções ao chamador.
 
 ## Instalação
 Pelo CLI do .NET:
@@ -79,8 +83,8 @@ using LeadSoft.Adapter.Google.Workspace;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // Google SSO
-builder.Services.AddGoogleSSOApi();        // scoped (padrão)
-// builder.Services.AddGoogleSSOApi(true); // singleton
+builder.Services.AddGoogleSSO();        // scoped (padrão)
+// builder.Services.AddGoogleSSO(true); // singleton
 
 WebApplication app = builder.Build();
 app.Run();
@@ -134,11 +138,32 @@ public class PerfilService(IGoogleSSO googleSSO)
 | `PhoneNumber` | `string?`   | Número de telefone (quando disponível)                             |
 | `Birthday`    | `DateTime?` | Data de nascimento (quando disponível)                             |
 
+## Logging
+
+O adapter emite logs via `ILogger<GoogleSSO>` quando disponível. Ao registrar via DI (`AddGoogleSSO()`), o `ILogger` é resolvido automaticamente. Sem DI configurado, `new GoogleSSO()` funciona normalmente sem nenhum log.
+
+O comportamento dos logs varia conforme `ASPNETCORE_ENVIRONMENT`:
+
+| Ambiente | Stack trace no log | Mensagem de exceção |
+|----------|-------------------|---------------------|
+| `Production` | Não — apenas a mensagem | Sim |
+| `Staging` / `Development` | Sim — stack trace completo | Sim |
+
+## Tratamento de erros
+
+| Exceção | Quando ocorre |
+|---------|--------------|
+| `BadRequestAppException` | Token vazio, erros de entrada inesperados |
+| `UnauthorizedAppException` | ID Token inválido ou expirado |
+| `ForbiddenAppException` | Domínio do usuário não está na lista autorizada |
+
+`GetUserProfileAsync` nunca lança exceção — erros são registrados no log e retorna `null`.
+
 ## Configuração recomendada
 - Configure `GOOGLE_SSO_CLIENT_ID` via variáveis de ambiente ou cofre seguro (Azure Key Vault, AWS Secrets Manager) — nunca em código-fonte.
 - Defina `GOOGLE_SSO_HOSTED_DOMAIN` para restringir o login. Use vírgula para múltiplos domínios; inclua `gmail.com` para aceitar também contas pessoais do Google.
+- Configure o logging padrão do ASP.NET Core (`builder.Logging`) para capturar os logs do adapter.
 - Propague `CancellationToken` em todas as chamadas assíncronas.
-- Capture e logue erros com `ILogger<T>` para diagnóstico e rastreabilidade.
 
 ## Boas práticas de integração
 - Valide o ID Token no servidor imediatamente após recebê-lo do frontend — nunca confie apenas na validação client-side.

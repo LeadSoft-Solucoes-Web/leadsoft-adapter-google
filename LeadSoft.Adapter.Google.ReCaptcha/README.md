@@ -24,7 +24,9 @@ Fornece uma camada leve, testável e orientada a interfaces para validação de 
 - Fácil integração com injeção de dependência (`IServiceCollection`).
 - Interfaces `IReCAPTCHA` e `IReCAPTCHAEnterprise` para facilitar testes e mocking.
 - Suporte a registro como `Scoped` ou `Singleton`.
-- Tratamento centralizado de erros e respostas HTTP.
+- Tratamento centralizado de erros com `AppException` e derivações — mensagens amigáveis para o chamador.
+- Logging integrado via `ILogger<T>` com suporte opcional por DI — sem logs quando não configurado.
+- Stack traces nos logs apenas em ambientes não-produtivos (`ASPNETCORE_ENVIRONMENT != Production`).
 - Preparado para extensão com políticas de resiliência (ex.: Polly).
 - Open Source (MIT License).
 
@@ -41,7 +43,7 @@ Fornece uma camada leve, testável e orientada a interfaces para validação de 
 - `Task<DTOAssessmentResp> CreateAssessmentsAsync(DTOAssessmentReq aDtoRequest, string apiKey)`
     - Cria uma avaliação (Assessment) da probabilidade de um evento ser legítimo.
     - Retorna propriedades do token, validade e plataforma de origem (web, Android ou iOS).
-    - Em caso de erro HTTP da API, retorna um `DTOAssessmentResp` com a mensagem de erro em `TokenProperties.InvalidReason` — nunca lança exceção.
+    - Lança `BadRequestAppException` com a mensagem de erro da API em caso de resposta HTTP de erro.
 
 ## Instalação
 Pelo CLI do .NET:
@@ -64,12 +66,12 @@ using LeadSoft.Adapter.Google.ReCaptcha;
 WebApplicationBuilder builder = WebApplication.CreateBuilder(args);
 
 // reCAPTCHA v3
-builder.Services.AddReCAPTCHAApi();        // scoped (padrão)
-// builder.Services.AddReCAPTCHAApi(true); // singleton
+builder.Services.AddReCAPTCHA();        // scoped (padrão)
+// builder.Services.AddReCAPTCHA(true); // singleton
 
 // reCAPTCHA Enterprise (requer o ID do projeto no Google Cloud)
-builder.Services.AddReCAPTCHAEnterpriseApi("meu-projeto-google-cloud");
-// builder.Services.AddReCAPTCHAEnterpriseApi("meu-projeto-google-cloud", useSingleton: true);
+builder.Services.AddReCAPTCHAEnterprise("meu-projeto-google-cloud");
+// builder.Services.AddReCAPTCHAEnterprise("meu-projeto-google-cloud", useSingleton: true);
 
 WebApplication app = builder.Build();
 app.Run();
@@ -166,8 +168,37 @@ Códigos de erro possíveis:
 | `Action`             | `string`   | Ação associada ao token, conforme definida na integração client-side   |
 | `CreateTime`         | `DateTime` | Data e hora em que o token foi criado                                  |
 
+## Logging
+
+O adapter emite logs via `ILogger<T>` quando disponível. Quando o serviço é instanciado diretamente (`new ReCAPTCHA()`) sem logger, nenhum log é emitido — sem erros.
+
+Ao registrar via DI (`AddReCAPTCHA()`, `AddReCAPTCHAEnterprise()`), o `ILogger` é resolvido automaticamente do service provider quando o logging estiver configurado na aplicação.
+
+O comportamento dos logs varia conforme a variável `ASPNETCORE_ENVIRONMENT`:
+
+| Ambiente | Stack trace no log | Mensagem de exceção |
+|----------|-------------------|---------------------|
+| `Production` | Não — apenas a mensagem | Sim |
+| `Staging` / `Development` | Sim — stack trace completo | Sim |
+
+Isso garante que em produção dados internos não sejam expostos nos logs, enquanto em desenvolvimento o diagnóstico é completo.
+
+Os atributos `[ReCAPTCHAResponse]` e `[ReCAPTCHAEnterpriseResponse]` resolvem o `ILoggerFactory` do `ValidationContext` quando disponível — não é necessária nenhuma configuração adicional.
+
+## Tratamento de erros
+
+Os métodos lançam as seguintes exceções tipadas (todas de `LeadSoft.Common.Library.Exceptions`):
+
+| Exceção | Quando ocorre |
+|---------|--------------|
+| `BadRequestAppException` | API do Google retorna HTTP 4xx (ex.: chave inválida, token malformado) |
+| `AppException` | Erro interno inesperado (serialização, rede, etc.) |
+
+As mensagens expostas ao chamador são intencionalmente genéricas. Os detalhes técnicos ficam nos logs.
+
 ## Configuração recomendada
-- Use `IServiceCollection` com `AddReCAPTCHAApi()` ou `AddReCAPTCHAEnterpriseApi()` — evita problemas com ciclo de vida do `HttpClient`.
+- Use `IServiceCollection` com `AddReCAPTCHA()` ou `AddReCAPTCHAEnterprise()` — evita problemas com ciclo de vida do `HttpClient`.
+- Configure o logging padrão do ASP.NET Core (`builder.Logging`) para capturar os logs do adapter.
 - Configure `Timeout` e cabeçalhos necessários conforme os limites das APIs do Google.
 - Adicione políticas de resiliência com Polly (`Retry`, `Circuit Breaker`) para chamadas de rede.
 - Propague `CancellationToken` em todas as chamadas assíncronas.

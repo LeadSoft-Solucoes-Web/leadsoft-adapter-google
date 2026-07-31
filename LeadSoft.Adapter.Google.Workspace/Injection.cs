@@ -1,4 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 
 namespace LeadSoft.Adapter.Google.Workspace;
 
@@ -30,8 +31,10 @@ public static class Injection
     public static void AddGoogleSSO(this IServiceCollection services, bool useSingleton = false)
     {
         if (useSingleton)
-            services.AddSingleton<IGoogleSSO, GoogleSSO>();
+            services.AddSingleton<IGoogleSSO>(sp =>
+                new GoogleSSO(sp.GetService<ILogger<GoogleSSO>>()));
         else
-            services.AddScoped<IGoogleSSO, GoogleSSO>();
+            services.AddScoped<IGoogleSSO>(sp =>
+                new GoogleSSO(sp.GetService<ILogger<GoogleSSO>>()));
     }
 }

@@ -16,6 +16,10 @@
               <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_PROJECT_ID</c></term><description>ID do projeto no Google Cloud.</description></item>
               <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_API_KEY</c></term><description>Chave de API do Google Cloud Console.</description></item>
             </list>
+            <para>
+            Quando o <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> estiver disponível no contexto de validação,
+            o atributo emite logs detalhados. Em produção, stack traces são suprimidos.
+            </para>
             </remarks>
         </member>
         <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Attibutes.ReCAPTCHAEnterpriseResponseAttribute.#ctor(System.String,System.String,System.String)">
@@ -25,7 +29,6 @@
             <param name="siteKey">Site Key pública do reCAPTCHA Enterprise. Se omitida, lê de <c>GOOGLE_RECAPTCHA_ENTERPRISE_SITE_KEY</c>.</param>
             <param name="projectId">ID do projeto no Google Cloud. Se omitido, lê de <c>GOOGLE_RECAPTCHA_ENTERPRISE_PROJECT_ID</c>.</param>
             <param name="apiKey">Chave de API do Google Cloud Console. Se omitida, lê de <c>GOOGLE_RECAPTCHA_ENTERPRISE_API_KEY</c>.</param>
-            <exception cref="T:System.NotImplementedException">Este atributo ainda não está implementado.</exception>
         </member>
         <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Attibutes.ReCAPTCHAEnterpriseResponseAttribute.IsValid(System.Object,System.ComponentModel.DataAnnotations.ValidationContext)">
             <inheritdoc/>
@@ -41,6 +44,11 @@
             
              <para>⚠️ Não confundir com a <i>Site Key</i> (chave pública usada no HTML) —
              a validação server-side exige a <b>Secret Key</b>.</para>
+            
+             <para>
+             Quando o <see cref="T:Microsoft.Extensions.Logging.ILoggerFactory"/> estiver disponível no contexto de validação,
+             o atributo emite logs detalhados. Em produção, stack traces são suprimidos.
+             </para>
              </remarks>
         </member>
         <member name="F:LeadSoft.Adapter.Google.ReCaptcha.Attibutes.ReCAPTCHAResponseAttribute.EnvVariable_SecretKey">
@@ -111,15 +119,17 @@
             DTO de requisição para criação de uma avaliação (Assessment) no reCAPTCHA Enterprise.
             </summary>
         </member>
-        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Contracts.DTOAssessmentReq.#ctor(System.String,System.String)">
-            <summary>
-            DTO de requisição para criação de uma avaliação (Assessment) no reCAPTCHA Enterprise.
-            </summary>
-        </member>
         <member name="P:LeadSoft.Adapter.Google.ReCaptcha.Contracts.DTOAssessmentReq.Event">
             <summary>
             Evento reCAPTCHA contendo o token e a chave do site para avaliação.
             </summary>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Contracts.DTOAssessmentReq.#ctor(System.String,System.String)">
+            <summary>
+            Inicializa uma nova instância de <see cref="T:LeadSoft.Adapter.Google.ReCaptcha.Contracts.DTOAssessmentReq"/>.
+            </summary>
+            <param name="token">Token de resposta do usuário gerado pelo reCAPTCHA Enterprise client-side.</param>
+            <param name="siteKey">Chave do site reCAPTCHA Enterprise.</param>
         </member>
         <member name="T:LeadSoft.Adapter.Google.ReCaptcha.Contracts.DTOAssessmentResp">
             <summary>
@@ -363,7 +373,7 @@
             Extensões de injeção de dependência para os serviços do Google reCAPTCHA.
             </summary>
         </member>
-        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Injection.AddReCAPTCHAApi(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Boolean)">
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Injection.AddReCAPTCHA(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.Boolean)">
             <summary>
             Registra o serviço do Google reCAPTCHA v3 no <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
             </summary>
@@ -373,7 +383,7 @@
             <see langword="false"/> para registrar como scoped (por requisição). Padrão: <see langword="false"/>.
             </param>
         </member>
-        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Injection.AddReCAPTCHAEnterpriseApi(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,System.Boolean)">
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.Injection.AddReCAPTCHAEnterprise(Microsoft.Extensions.DependencyInjection.IServiceCollection,System.String,System.Boolean)">
             <summary>
             Registra o serviço do Google reCAPTCHA Enterprise no <see cref="T:Microsoft.Extensions.DependencyInjection.IServiceCollection"/>.
             </summary>
@@ -432,20 +442,25 @@
              Encapsula as chamadas HTTP à API de verificação de token (<c>siteverify</c>).
              </summary>
              <remarks>
-             Configuração do serviço via variáveis de ambiente:
              A <b>Secret Key</b> (chave privada do servidor) pode ser fornecida diretamente no construtor
              ou via variável de ambiente <c>GOOGLE_RECAPTCHA_SECRET_KEY</c>.
             
              <para>⚠️ Não confundir com a <i>Site Key</i> (chave pública usada no HTML) —
              a validação server-side exige a <b>Secret Key</b>.</para>
+            
+             <para>
+             Em ambientes de desenvolvimento e staging, o log inclui stack trace completo.
+             Em produção, apenas a mensagem de erro é registrada para evitar exposição de dados internos.
+             </para>
              </remarks>
         </member>
-        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA.#ctor">
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA.#ctor(Microsoft.Extensions.Logging.ILogger{LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA})">
             <summary>
             Inicializa uma nova instância de <see cref="T:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA"/> com um <see cref="T:System.Net.Http.HttpClient"/> configurado.
             </summary>
+            <param name="logger">Logger opcional. Quando omitido, nenhum log é emitido.</param>
         </member>
-        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA.#ctor(System.Net.Http.HttpMessageHandler)">
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA.#ctor(System.Net.Http.HttpMessageHandler,Microsoft.Extensions.Logging.ILogger{LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHA})">
             <summary>
             Construtor interno para injeção de <see cref="T:System.Net.Http.HttpMessageHandler"/> em testes unitários.
             </summary>
@@ -462,21 +477,26 @@
             Encapsula as chamadas HTTP à API de avaliação de eventos (<c>assessments</c>).
             </summary>
             <remarks>
-            Forneça as credenciais do reCAPTCHA Enterprise via variáveis de ambiente.
+            Forneça as credenciais do reCAPTCHA Enterprise via variáveis de ambiente:
             <list type="bullet">
               <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_SITE_KEY</c></term><description>Chave pública do site reCAPTCHA Enterprise.</description></item>
               <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_PROJECT_ID</c></term><description>ID do projeto no Google Cloud.</description></item>
               <item><term><c>GOOGLE_RECAPTCHA_ENTERPRISE_API_KEY</c></term><description>Chave de API do Google Cloud Console.</description></item>
             </list>
+            <para>
+            Em ambientes de desenvolvimento e staging, o log inclui stack trace completo.
+            Em produção, apenas a mensagem de erro é registrada para evitar exposição de dados internos.
+            </para>
             </remarks>
         </member>
-        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise.#ctor(System.String)">
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise.#ctor(System.String,Microsoft.Extensions.Logging.ILogger{LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise})">
             <summary>
             Inicializa uma nova instância de <see cref="T:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise"/> para o projeto informado.
             </summary>
             <param name="projectId">ID do projeto no Google Cloud associado ao reCAPTCHA Enterprise.</param>
+            <param name="logger">Logger opcional. Quando omitido, nenhum log é emitido.</param>
         </member>
-        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise.#ctor(System.String,System.Net.Http.HttpMessageHandler)">
+        <member name="M:LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise.#ctor(System.String,System.Net.Http.HttpMessageHandler,Microsoft.Extensions.Logging.ILogger{LeadSoft.Adapter.Google.ReCaptcha.ReCAPTCHAEnterprise})">
             <summary>
             Construtor interno para injeção de <see cref="T:System.Net.Http.HttpMessageHandler"/> em testes unitários.
             </summary>

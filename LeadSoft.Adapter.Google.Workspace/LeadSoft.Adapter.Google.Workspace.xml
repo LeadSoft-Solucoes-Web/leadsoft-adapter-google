@@ -170,7 +170,17 @@
               <item><description><c>GOOGLE_SSO_CLIENT_SECRET</c> — Client Secret do projeto OAuth2 no Google Cloud Console.</description></item>
               <item><description><c>GOOGLE_SSO_HOSTED_DOMAIN</c> — (Opcional) Lista de domínios permitidos separados por vírgula (ex.: <c>empresa.com,parceiro.com</c>). Use <c>gmail.com</c> na lista para aceitar contas pessoais do Google. Quando definido, bloqueia contas fora da lista.</description></item>
             </list>
+            <para>
+            Em ambientes de desenvolvimento e staging, o log inclui stack trace completo.
+            Em produção, apenas a mensagem de erro é registrada para evitar exposição de dados internos.
+            </para>
             </remarks>
+        </member>
+        <member name="M:LeadSoft.Adapter.Google.Workspace.GoogleSSO.#ctor(Microsoft.Extensions.Logging.ILogger{LeadSoft.Adapter.Google.Workspace.GoogleSSO})">
+            <summary>
+            Inicializa uma nova instância de <see cref="T:LeadSoft.Adapter.Google.Workspace.GoogleSSO"/>.
+            </summary>
+            <param name="logger">Logger opcional. Quando omitido, nenhum log é emitido.</param>
         </member>
         <member name="M:LeadSoft.Adapter.Google.Workspace.GoogleSSO.GetOAuthSSOAsync(System.String,System.Threading.CancellationToken)">
             <inheritdoc/>

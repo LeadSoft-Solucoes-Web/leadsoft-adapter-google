@@ -1,4 +1,3 @@
-using LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 using LeadSoft.Google.Tests.Helpers;
 using Newtonsoft.Json;
 using System.Net;
@@ -7,13 +6,15 @@ namespace LeadSoft.Google.Tests;
 
 public class ReCAPTCHAEnterpriseTests
 {
-    private const string TestProjectId = "my-test-project";
+    private const string TestProjectId = "";
+    private const string TestSiteKey = "";
+    private const string TestApiKey = "";
 
     private static string AssessmentSuccessJson() =>
         JsonConvert.SerializeObject(new
         {
             name = $"projects/{TestProjectId}/assessments/abc123",
-            @event = new { token = "test-token", siteKey = "test-site-key" },
+            @event = new { token = "test-token", siteKey = TestSiteKey },
             tokenProperties = new
             {
                 valid = true,
@@ -54,10 +55,11 @@ public class ReCAPTCHAEnterpriseTests
     [Fact]
     public async Task CreateAssessmentsAsync_SuccessResponse_ReturnsDtoWithValidTrue()
     {
-        using var enterprise = new ReCAPTCHAEnterprise(TestProjectId, new FakeHttpMessageHandler(AssessmentSuccessJson()));
-        var request = new DTOAssessmentReq("test-token", "test-site-key");
+        using var enterprise = new ReCAPTCHAEnterprise(TestProjectId);
+        var request = new DTOAssessmentReq("",
+                                           TestSiteKey);
 
-        var result = await enterprise.CreateAssessmentsAsync(request, "my-api-key");
+        var result = await enterprise.CreateAssessmentsAsync(request, TestApiKey);
 
         Assert.NotNull(result);
         Assert.NotNull(result.TokenProperties);

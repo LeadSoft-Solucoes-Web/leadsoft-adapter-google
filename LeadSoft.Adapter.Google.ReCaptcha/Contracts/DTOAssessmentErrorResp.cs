@@ -5,15 +5,8 @@ namespace LeadSoft.Adapter.Google.ReCaptcha.Contracts;
 [Serializable]
 public sealed partial record DTOAssessmentErrorResp
 {
-    [JsonProperty("code")]
-    public int Code { get; private set; } = 0;
+    [JsonProperty("error")]
+    public DTOAssessmentError Error { get; private set; } = new();
 
-    [JsonProperty("message")]
-    public string Message { get; private set; } = string.Empty;
-
-    [JsonProperty("status")]
-    public string Status { get; private set; } = string.Empty;
-
-    public string GetErrorMsg()
-        => $"Google reCAPTCHA Enterprise API Error: {Code}: {Message} [{Status}]";
+    public string GetErrorMsg() => Error?.GetErrorMsg() ?? "Assessment Error não identificado.";
 }
