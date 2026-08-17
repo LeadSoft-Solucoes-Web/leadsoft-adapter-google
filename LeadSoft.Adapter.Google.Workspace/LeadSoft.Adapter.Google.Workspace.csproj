@@ -70,7 +70,7 @@
     <PackageReference Include="Google.Apis.Auth" Version="1.75.0" />
     <PackageReference Include="Google.Apis.PeopleService.v1" Version="1.74.0.3973" />
     <PackageReference Include="LeadSoft.Common.GlobalDomain" Version="10.0.15" />
-    <PackageReference Include="LeadSoft.Common.Library" Version="10.0.4" />
+    <PackageReference Include="LeadSoft.Common.Library" Version="10.0.5" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="EnvVariable.Designer.cs">
